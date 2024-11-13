@@ -54,6 +54,26 @@ public class Hospital {
         return patients;
     }
 
+    /**
+     * change patients doctor
+     * @param patient
+     * @param doctor
+     * @return true if success, return false if any problems occur
+     */
+    public boolean changeDoctor(Patient patient, Doctor doctor){
+        //prevent null pointer exception
+        if (patient == null){
+            return false;
+        }
+        try {
+            patient.setDoctor(doctor);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+
     public void addDoctor(Doctor newDoctor) throws DoctorManagementException{
         for (Doctor doctor: this.doctors){
             if (doctor.getFirstName().equals(newDoctor.getFirstName()) && doctor.getLastName().equals(newDoctor.getLastName())){
@@ -79,12 +99,34 @@ public class Hospital {
 
     }
 
-    public void checkPatientIn(Patient patient){
-        this.patientsPresent.add(patient);
+    /**
+     * method to check patient in, adds patient to list of patients CURRENTLY checked in to a specific hospital
+     * @param newPatient
+     * @throws PatientManagementException
+     */
+    public void checkPatientIn(Patient newPatient) throws PatientManagementException{
+        for (Patient patient: this.getPatientsPresent()){
+            if (patient.getFirstName().equals(newPatient.getFirstName()) && patient.getLastName().equals(newPatient.getLastName())){
+                throw new PatientManagementException("Patient already checked in");
+            }
+        }
+        this.getPatientsPresent().add(newPatient);
     }
 
-    public void addPatient(Patient patient){
-        //add patient to overall list, do appropriate checking to make sure that the patient is actually in the hospital list
+
+    /**
+     * method adds patient to a hospital list, this list is NOT the list of patients currently checked in, its the list of patients that are in the 
+     * hospitals system
+     * @param newPatient
+     * @throws PatientManagementException if the patient is already in the system
+     */
+    public void addPatient(Patient newPatient) throws PatientManagementException{
+        for (Patient patient: this.getPatients()){
+            if (patient.getFirstName().equals(newPatient.getFirstName()) && patient.getLastName().equals(newPatient.getLastName())){
+                throw new PatientManagementException("Patient already checked in");
+            }
+        }
+        this.getPatients().add(newPatient);
     }
 }
 

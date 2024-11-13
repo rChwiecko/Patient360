@@ -42,37 +42,41 @@ public class Receptionist extends Person {
 
     }
 
-    public void checkInPatient(Patient patient, Appointment appointment) {
+    public boolean checkInPatient(Patient patient, Appointment appointment) {
         if (patient != null){
             patient.checkIn();
             if (this.getLocation() != null){
-                this.getLocation().checkPatientIn(patient);
+                try{
+                    this.getLocation().checkPatientIn(patient);
+                }catch (PatientManagementException e){
+                    return false;
+                }
             }
             //appointment is considered optional because walk in appointments are possible
             if (appointment != null){
                 appointment.updateStatus("in progress");
-            }
+            }return true;
             
+        }else{
+            return false;
         }
     }
 
-    public void checkOutPatient(Patient patient, Appointment appointment) {
+    public boolean checkOutPatient(Patient patient, Appointment appointment) {
         if (patient != null){
             patient.checkOut();
             if (this.getLocation() != null){
                 try{
                     this.getLocation().checkPatientOut(patient);
-                }catch
+                }catch(PatientManagementException e){
+                    return false;
+                }
             }
-            //appointment is considered optional because walk in appointments are possible
             if (appointment != null){
                 appointment.updateStatus("complete");
-            }
+            }return true;
         }
-    }
-
-    public String getWorkShift(){
-        return this.workShift;
+        return false;
     }
 
     public Hospital getLocation(){
@@ -110,10 +114,15 @@ public class Receptionist extends Person {
         }
     }
 //String firstName, String lastName, String email, String phoneNum, String ID, String medicalRecordNum, Doctor doctor, String medicalRecord
-    public void addPatient(String firstName, String lastName, String phoneNumber, String email, Doctor doctor) {
+    public void addPatient(String firstName, String lastName, String phoneNumber, String email, Doctor doctor) throws PatientManagementException{
         Patient newPaitient = new Patient(firstName, lastName, email, phoneNumber, "12", "3", doctor, "");
+        //check to see if patient is already a member of the hospital
+        for (Patient patient: this.getLocation().getPatients()){
+            if (patient.getFirstName().equals(newPaitient.getFirstName()) && patient.getLastName().equals(newPaitient.getLastName())){
+                throw new PatientManagementException("Patient already exists");
+            }
+        }
         this.getLocation().addPatient(newPaitient);
-        //if new patient, no appointment exists yet
         this.checkInPatient(newPaitient, null);
     }
 }

@@ -86,4 +86,8 @@ public class Patient extends Person {
     public void checkOut(){
         this.checkIn = false;
     }
+
+    public void setDoctor(Doctor newDoctor){
+        this.doctor = newDoctor;
+    }
 }
