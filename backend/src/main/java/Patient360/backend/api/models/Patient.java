@@ -1,8 +1,10 @@
 package Patient360.backend.api.models;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.List;
 
-class Patient extends Person {
+public class Patient extends Person {
     private String medicalRecordNum;
     private String currentMedications;
     private List<Appointment> appointments;
@@ -21,11 +23,12 @@ class Patient extends Person {
 
     // Methods
     public void bookAppointment(Appointment appointment) {
-        // Implementation
+        this.getAppointments().add(appointment);
     }
 
     public void addMedicalHistory(String record) {
-        // Implementation
+        String str = "--"+record+"--";
+        this.updateMedicalRecord(str);
     }
 
     public String getCurrentMedications() {
@@ -33,11 +36,36 @@ class Patient extends Person {
     }
 
     public Appointment getNextAppointment() {
-        // Implementation
-        return null;
+        if (appointments == null || appointments.isEmpty()) {
+            return null; // Return null if the list is empty
+        }
+
+        LocalDate today = LocalDate.now();
+        Appointment closestAppointment = null;
+        long closestDaysDifference = Long.MAX_VALUE;
+
+        for (Appointment appointment : appointments) {
+            long daysDifference = ChronoUnit.DAYS.between(today, appointment.getDate());
+
+            // Check if this appointment is closer to today
+            if (daysDifference >= 0 && daysDifference < closestDaysDifference) {
+                closestDaysDifference = daysDifference;
+                closestAppointment = appointment;
+            }
+        }
+
+        return closestAppointment;
     }
 
     public String getMedicalRecord() {
         return medicalRecord;
+    }
+
+    public List<Appointment> getAppointments(){
+        return this.appointments;
+    }
+
+    public void updateMedicalRecord(String additional){
+        this.medicalRecord += additional;
     }
 }

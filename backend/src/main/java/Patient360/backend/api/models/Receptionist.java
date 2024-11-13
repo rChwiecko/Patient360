@@ -1,24 +1,33 @@
 package Patient360.backend.api.models;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-class Receptionist extends Person {
+public class Receptionist extends Person {
     private String workShift;
     private List<Appointment> handledAppointments;
-    private String location;
-
+    private Hospital recepHospital;
     // Constructor
     public Receptionist(String firstName, String lastName, String email, String phoneNum, String ID,
-                        String workShift, String location) {
+                        String workShift, Hospital hospital) {
         super(firstName, lastName, email, phoneNum, ID);
         this.workShift = workShift;
-        this.location = location;
+        this.recepHospital = hospital;
         this.handledAppointments = new ArrayList<>();
     }
 
     // Methods
     public void cancelAppointment(Appointment appointment) {
-        // Implementation
+        handledAppointments.remove(appointment);
+
+        // Remove from relevant doctor's appointment list
+        if (appointment.getDoctor() != null) {
+            appointment.getDoctor().getAppointments().remove(appointment);
+        }
+
+        // Remove from relevant patient's appointment list
+        if (appointment.getPatient() != null) {
+            appointment.getPatient().getAppointments().remove(appointment);
+        }
     }
 
     public void managePatientRecord(Patient patient) {

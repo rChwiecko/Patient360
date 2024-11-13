@@ -1,8 +1,8 @@
 package Patient360.backend.api.models;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-class Hospital {
+public class Hospital {
     private String address;
     private String department;
     private int capacity;

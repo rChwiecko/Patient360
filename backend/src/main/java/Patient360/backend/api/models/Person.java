@@ -1,6 +1,6 @@
 package Patient360.backend.api.models;
 
-class Person {
+public class Person {
     private String firstName;
     private String lastName;
     private String email;

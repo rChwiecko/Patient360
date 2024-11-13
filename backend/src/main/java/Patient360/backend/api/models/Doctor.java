@@ -1,8 +1,8 @@
 package Patient360.backend.api.models;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-class Doctor extends Person {
+public class Doctor extends Person {
     private String specialization;
     private int yearsOfExperience;
     private List<Patient> patients;
@@ -21,7 +21,7 @@ class Doctor extends Person {
 
     // Methods
     public void diagnose(Patient patient, String diagnosis) {
-        // Implementation
+        
     }
 
     public void prescribedMedication(Patient patient, String medication) {
@@ -42,5 +42,9 @@ class Doctor extends Person {
 
     public boolean getAvailability() {
         return availability;
+    }
+
+    public List<Appointment> getAppointments(){
+        return this.appointments;
     }
 }

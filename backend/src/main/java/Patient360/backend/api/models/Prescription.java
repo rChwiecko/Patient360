@@ -1,6 +1,6 @@
 package Patient360.backend.api.models;
 
-class Prescription {
+public class Prescription {
     private String prescriptionId;
     private Patient patient;
     private String medicationName;

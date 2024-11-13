@@ -1,15 +1,16 @@
 package Patient360.backend.api.models;
+import java.time.LocalDateTime;
 
 abstract class Appointment {
     private Patient patient;
     private Doctor doctor;
     private String appointmentType;
     private String description;
-    private String date;
+    private LocalDateTime date;
     private String location;
 
     // Constructor
-    public Appointment(Patient patient, Doctor doctor, String appointmentType, String description, String date, String location) {
+    public Appointment(Patient patient, Doctor doctor, String appointmentType, String description, LocalDateTime date, String location) {
         this.patient = patient;
         this.doctor = doctor;
         this.appointmentType = appointmentType;
@@ -35,7 +36,7 @@ abstract class Appointment {
         return description;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
