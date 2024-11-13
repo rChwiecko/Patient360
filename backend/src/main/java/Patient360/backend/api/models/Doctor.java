@@ -19,17 +19,9 @@ public class Doctor extends Person {
         this.appointments = new ArrayList<>();
     }
 
-    // Methods
-    public void diagnose(Patient patient, String diagnosis) {
-        
-    }
 
-    public void prescribedMedication(Patient patient, String medication) {
-        // Implementation
-    }
-
-    public void scheduleAppointment(Appointment appointment) {
-        // Implementation
+    public void scheduleAppointment(Appointment newAppointment) {
+        this.appointments.add(newAppointment);
     }
 
     public String getSpecialization() {

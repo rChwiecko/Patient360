@@ -7,16 +7,18 @@ abstract class Appointment {
     private String appointmentType;
     private String description;
     private LocalDateTime date;
-    private String location;
+    private Hospital location;
+    private String status;
 
     // Constructor
-    public Appointment(Patient patient, Doctor doctor, String appointmentType, String description, LocalDateTime date, String location) {
+    public Appointment(Patient patient, Doctor doctor, String appointmentType, String description, LocalDateTime date, Hospital location) {
         this.patient = patient;
         this.doctor = doctor;
         this.appointmentType = appointmentType;
         this.description = description;
         this.date = date;
         this.location = location;
+        this.status = "incomplete";
     }
 
     // Methods
@@ -40,7 +42,27 @@ abstract class Appointment {
         return date;
     }
 
-    public String getLocation() {
+    public void setDate(LocalDateTime newDate){
+        this.date = newDate;
+    }
+
+    public Hospital getLocation() {
         return location;
+    }
+
+    public String getAppointmentStatus(){
+        return this.status;
+    }
+
+    public void updateStatus(String newStatus){
+        this.status = newStatus;
+    }
+
+    public void completeAppointment(){
+        this.updateStatus("complete");
+    }
+
+    public void reschedule(LocalDateTime newDate){
+         this.setDate(newDate);
     }
 }

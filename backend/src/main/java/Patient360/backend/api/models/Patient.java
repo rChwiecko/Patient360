@@ -4,21 +4,24 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Patient extends Person {
     private String medicalRecordNum;
-    private String currentMedications;
+    private List<Prescription> currentMedications;
     private List<Appointment> appointments;
     private Doctor doctor;
     private String medicalRecord;
+    private boolean checkIn;
 
     // Constructor
     public Patient(String firstName, String lastName, String email, String phoneNum, String ID, String medicalRecordNum, String currentMedications, Doctor doctor, String medicalRecord) {
         super(firstName, lastName, email, phoneNum, ID);
         this.medicalRecordNum = medicalRecordNum;
-        this.currentMedications = currentMedications;
+        this.currentMedications = new ArrayList<>();
         this.doctor = doctor;
         this.medicalRecord = medicalRecord;
         this.appointments = new ArrayList<>();
+        this.checkIn = true; //assumes patient is at the hospital checked in when they are created
     }
 
     // Methods
@@ -31,7 +34,7 @@ public class Patient extends Person {
         this.updateMedicalRecord(str);
     }
 
-    public String getCurrentMedications() {
+    public List<Prescription> getCurrentMedications() {
         return currentMedications;
     }
 
@@ -67,5 +70,21 @@ public class Patient extends Person {
 
     public void updateMedicalRecord(String additional){
         this.medicalRecord += additional;
+    }
+
+    public List<Prescription> getPrescriptions(){
+        return this.currentMedications;
+    }
+
+    public void addPrescription(Prescription newPres){
+        this.getCurrentMedications().add(newPres);
+    }
+
+    public void checkIn(){
+        this.checkIn = true;
+    }
+
+    public void checkOut(){
+        this.checkIn = false;
     }
 }

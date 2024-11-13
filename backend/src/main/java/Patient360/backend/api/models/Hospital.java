@@ -51,5 +51,17 @@ public class Hospital {
     public List<Patient> getPatients() {
         return patients;
     }
+
+    public void checkPatientOut(Patient patient){
+        //implement
+    }
+
+    public void checkPatientIn(Patient patient){
+        //check if patient is in hospital list, if not add, then add to patients present list
+    }
+
+    public void addPatient(Patient patient){
+        //add patient to overall list, do appropriate checking to make sure that the patient is actually in the hospital list
+    }
 }
 
