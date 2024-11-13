@@ -83,24 +83,24 @@ public class Receptionist extends Person {
     }
 
     //returns false if the creation was not successful (ie, doctor was not available)
-    public boolean makeAppointment(Patient patient, Doctor doctor, String appointmentType, String description, LocalDateTime date, Hospital location, Duration appointmentDuration){
+    public boolean makeAppointment(Patient patient, Doctor doctor, String appointmentType, String description, LocalDateTime date, Hospital location, Duration appointmentDuration, String preAppointmentInstructions){
         if (doctor.isAvailable(date, appointmentDuration)){
             switch (appointmentType){
-                case "general":
-                    GeneralConsultation newAppointmentGeneral = new GeneralConsultation(patient, doctor, description, date, location);
+                case "general" -> {
+                    GeneralConsultation newAppointmentGeneral = new GeneralConsultation(patient, doctor, description, date, location, preAppointmentInstructions);
                     patient.bookAppointment(newAppointmentGeneral);
                     doctor.scheduleAppointment(newAppointmentGeneral);
-                    break;
-                case "follow":
-                    FollowUp newAppointmentFollow = new FollowUp(patient, doctor, description, date, location);
+                }
+                case "follow" -> {
+                    FollowUp newAppointmentFollow = new FollowUp(patient, doctor, description, date, location, preAppointmentInstructions);
                     patient.bookAppointment(newAppointmentFollow);
                     doctor.scheduleAppointment(newAppointmentFollow);
-                    break;
-                case "surgery":
-                    Surgery newAppointmentSurgery = new Surgery(patient, doctor, description, date, location);
+                }
+                case "surgery" -> {
+                    Surgery newAppointmentSurgery = new Surgery(patient, doctor, description, date, location, preAppointmentInstructions);
                     patient.bookAppointment(newAppointmentSurgery);
                     doctor.scheduleAppointment(newAppointmentSurgery);
-                    break;
+                }
             }
             return true;
         }

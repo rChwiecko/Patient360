@@ -9,9 +9,10 @@ abstract class Appointment {
     private LocalDateTime date;
     private Hospital location;
     private String status;
+    private String preAppointmentInstructions;
 
     // Constructor
-    public Appointment(Patient patient, Doctor doctor, String appointmentType, String description, LocalDateTime date, Hospital location) {
+    public Appointment(Patient patient, Doctor doctor, String appointmentType, String description, LocalDateTime date, Hospital location, String preAppointmentInstructions) {
         this.patient = patient;
         this.doctor = doctor;
         this.appointmentType = appointmentType;
@@ -19,6 +20,9 @@ abstract class Appointment {
         this.date = date;
         this.location = location;
         this.status = "incomplete";
+        this.preAppointmentInstructions = preAppointmentInstructions;
+        
+        //fill in with email logic for pre instructions
     }
 
     // Methods
@@ -64,5 +68,9 @@ abstract class Appointment {
 
     public void reschedule(LocalDateTime newDate){
          this.setDate(newDate);
+    }
+
+    public String getPreAppointmentInstructions(){
+        return this.preAppointmentInstructions;
     }
 }
