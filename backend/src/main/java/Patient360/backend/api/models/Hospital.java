@@ -2,6 +2,9 @@ package Patient360.backend.api.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import Patient360.backend.api.models.exceptions.DoctorManagementException;
+import Patient360.backend.api.models.exceptions.PatientManagementException;
+
 public class Hospital {
     private String address;
     private String department;
@@ -52,13 +55,29 @@ public class Hospital {
         return patients;
     }
 
-    public void addDoctor(Doctor newDoctor){
+    public void addDoctor(Doctor newDoctor) throws DoctorManagementException{
+        for (Doctor doctor: this.doctors){
+            if (doctor.getFirstName().equals(newDoctor.getFirstName()) && doctor.getLastName().equals(newDoctor.getLastName())){
+                throw new DoctorManagementException("Doctor already exists");
+            }
+        }
         this.doctors.add(newDoctor);
     }
 
 
-    public void checkPatientOut(Patient patient){
-        //implement
+    public void checkPatientOut(Patient newPatient) throws PatientManagementException{
+        boolean found = false;
+        for (Patient patient: this.patientsPresent){
+            if (patient.getFirstName().equals(patient.getFirstName()) && patient.getLastName().equals(patient.getLastName())){
+                found = true;
+            }
+        }
+        if (!found){
+            throw new PatientManagementException("Patient was never check in");
+        }else{
+            
+        }
+
     }
 
     public void checkPatientIn(Patient patient){

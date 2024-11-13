@@ -61,7 +61,9 @@ public class Receptionist extends Person {
         if (patient != null){
             patient.checkOut();
             if (this.getLocation() != null){
-                this.getLocation().checkPatientOut(patient);
+                try{
+                    this.getLocation().checkPatientOut(patient);
+                }catch
             }
             //appointment is considered optional because walk in appointments are possible
             if (appointment != null){
