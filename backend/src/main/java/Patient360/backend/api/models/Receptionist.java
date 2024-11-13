@@ -1,7 +1,9 @@
 package Patient360.backend.api.models;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Receptionist extends Person {
     private String workShift;
@@ -80,24 +82,30 @@ public class Receptionist extends Person {
         this.recepHospital = newHospital;
     }
 
-
-    public void makeAppointment(Patient patient, Doctor doctor, String appointmentType, String description, LocalDateTime date, Hospital location){
-        switch (appointmentType){
-            case "general":
-                GeneralConsultation newAppointmentGeneral = new GeneralConsultation(patient, doctor, description, date, location);
-                patient.bookAppointment(newAppointmentGeneral);
-                doctor.scheduleAppointment(newAppointmentGeneral);
-                break;
-            case "follow":
-                FollowUp newAppointmentFollow = new FollowUp(patient, doctor, description, date, location);
-                patient.bookAppointment(newAppointmentFollow);
-                doctor.scheduleAppointment(newAppointmentFollow);
-                break;
-            case "surgery":
-                Surgery newAppointmentSurgery = new Surgery(patient, doctor, description, date, location);
-                patient.bookAppointment(newAppointmentSurgery);
-                doctor.scheduleAppointment(newAppointmentSurgery);
-                break;
+    //returns false if the creation was not successful (ie, doctor was not available)
+    public boolean makeAppointment(Patient patient, Doctor doctor, String appointmentType, String description, LocalDateTime date, Hospital location, Duration appointmentDuration){
+        if (doctor.isAvailable(date, appointmentDuration)){
+            switch (appointmentType){
+                case "general":
+                    GeneralConsultation newAppointmentGeneral = new GeneralConsultation(patient, doctor, description, date, location);
+                    patient.bookAppointment(newAppointmentGeneral);
+                    doctor.scheduleAppointment(newAppointmentGeneral);
+                    break;
+                case "follow":
+                    FollowUp newAppointmentFollow = new FollowUp(patient, doctor, description, date, location);
+                    patient.bookAppointment(newAppointmentFollow);
+                    doctor.scheduleAppointment(newAppointmentFollow);
+                    break;
+                case "surgery":
+                    Surgery newAppointmentSurgery = new Surgery(patient, doctor, description, date, location);
+                    patient.bookAppointment(newAppointmentSurgery);
+                    doctor.scheduleAppointment(newAppointmentSurgery);
+                    break;
+            }
+            return true;
+        }
+        else{
+            return false;
         }
     }
 

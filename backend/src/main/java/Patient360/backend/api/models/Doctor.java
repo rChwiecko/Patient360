@@ -1,7 +1,8 @@
 package Patient360.backend.api.models;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 public class Doctor extends Person {
     private String specialization;
     private int yearsOfExperience;
@@ -38,5 +39,19 @@ public class Doctor extends Person {
 
     public List<Appointment> getAppointments(){
         return this.appointments;
+    }
+    
+
+    public boolean isAvailable(LocalDateTime requestedTime, Duration appointmentDuration) {
+        for (Appointment appointment : appointments) {
+            LocalDateTime start = appointment.getDate();
+            LocalDateTime end = start.plus(appointmentDuration);
+
+            // Check if the requested time overlaps with any existing appointment
+            if (!requestedTime.isBefore(start) && requestedTime.isBefore(end)) {
+                return false; // Doctor is not available
+            }
+        }
+        return true; // Doctor is available
     }
 }
