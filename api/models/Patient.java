@@ -1,4 +1,3 @@
-package Patient360.backend.api.models;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;

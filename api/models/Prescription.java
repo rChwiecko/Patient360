@@ -1,4 +1,4 @@
-package Patient360.backend.api.models;
+
 
 public class Prescription {
     private String prescriptionId;

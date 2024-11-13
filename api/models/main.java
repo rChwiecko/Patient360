@@ -1,4 +1,3 @@
-package Patient360.backend.api.models;
 
 import Patient360.backend.api.models.exceptions.DoctorManagementException;
 

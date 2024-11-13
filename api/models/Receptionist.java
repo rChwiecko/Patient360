@@ -1,4 +1,3 @@
-package Patient360.backend.api.models;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -72,8 +71,8 @@ public class Receptionist extends Person {
         }
     }
 
-    public String getWorkShift() {
-        return workShift;
+    public String getWorkShift(){
+        return this.workShift;
     }
 
     public Hospital getLocation(){

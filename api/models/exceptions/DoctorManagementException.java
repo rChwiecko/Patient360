@@ -1,5 +1,3 @@
-package Patient360.backend.api.models.exceptions;
-
 public class DoctorManagementException extends Exception {
     
     // Default constructor

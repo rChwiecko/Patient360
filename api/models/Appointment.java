@@ -1,4 +1,3 @@
-package Patient360.backend.api.models;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
