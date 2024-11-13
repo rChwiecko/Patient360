@@ -1,4 +1,5 @@
 package Patient360.backend.api.models;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 abstract class Appointment {
@@ -10,9 +11,9 @@ abstract class Appointment {
     private Hospital location;
     private String status;
     private String preAppointmentInstructions;
-
+    private Duration duration;
     // Constructor
-    public Appointment(Patient patient, Doctor doctor, String appointmentType, String description, LocalDateTime date, Hospital location, String preAppointmentInstructions) {
+    public Appointment(Patient patient, Doctor doctor, String appointmentType, String description, LocalDateTime date, Hospital location, String preAppointmentInstructions, Duration appointmentDuration) {
         this.patient = patient;
         this.doctor = doctor;
         this.appointmentType = appointmentType;
@@ -21,13 +22,17 @@ abstract class Appointment {
         this.location = location;
         this.status = "incomplete";
         this.preAppointmentInstructions = preAppointmentInstructions;
-        
+        this.duration =  appointmentDuration;
         //fill in with email logic for pre instructions
     }
 
     // Methods
     public Patient getPatient() {
         return patient;
+    }
+
+    public Duration getDuration(){
+        return this.duration;
     }
 
     public Doctor getDoctor() {

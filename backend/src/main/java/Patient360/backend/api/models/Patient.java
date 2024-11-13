@@ -14,7 +14,7 @@ public class Patient extends Person {
     private boolean checkIn;
 
     // Constructor
-    public Patient(String firstName, String lastName, String email, String phoneNum, String ID, String medicalRecordNum, String currentMedications, Doctor doctor, String medicalRecord) {
+    public Patient(String firstName, String lastName, String email, String phoneNum, String ID, String medicalRecordNum, Doctor doctor, String medicalRecord) {
         super(firstName, lastName, email, phoneNum, ID);
         this.medicalRecordNum = medicalRecordNum;
         this.currentMedications = new ArrayList<>();

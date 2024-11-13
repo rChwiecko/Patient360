@@ -52,12 +52,17 @@ public class Hospital {
         return patients;
     }
 
+    public void addDoctor(Doctor newDoctor){
+        this.doctors.add(newDoctor);
+    }
+
+
     public void checkPatientOut(Patient patient){
         //implement
     }
 
     public void checkPatientIn(Patient patient){
-        //check if patient is in hospital list, if not add, then add to patients present list
+        this.patientsPresent.add(patient);
     }
 
     public void addPatient(Patient patient){

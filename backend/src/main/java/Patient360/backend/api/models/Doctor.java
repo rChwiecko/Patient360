@@ -43,12 +43,15 @@ public class Doctor extends Person {
     
 
     public boolean isAvailable(LocalDateTime requestedTime, Duration appointmentDuration) {
-        for (Appointment appointment : appointments) {
+        for (Appointment appointment : this.appointments) {
             LocalDateTime start = appointment.getDate();
-            LocalDateTime end = start.plus(appointmentDuration);
-
+            LocalDateTime end = start.plus(appointment.getDuration()); // Use each appointment's actual duration
+    
             // Check if the requested time overlaps with any existing appointment
-            if (!requestedTime.isBefore(start) && requestedTime.isBefore(end)) {
+            LocalDateTime requestedEnd = requestedTime.plus(appointmentDuration);
+            if ((requestedTime.isBefore(end) && requestedTime.isAfter(start)) || // Start of new appointment overlaps
+                (requestedEnd.isAfter(start) && requestedEnd.isBefore(end)) ||   // End of new appointment overlaps
+                requestedTime.equals(start)) { // Exact start time match
                 return false; // Doctor is not available
             }
         }

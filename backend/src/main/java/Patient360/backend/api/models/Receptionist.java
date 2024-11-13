@@ -87,17 +87,17 @@ public class Receptionist extends Person {
         if (doctor.isAvailable(date, appointmentDuration)){
             switch (appointmentType){
                 case "general" -> {
-                    GeneralConsultation newAppointmentGeneral = new GeneralConsultation(patient, doctor, description, date, location, preAppointmentInstructions);
+                    GeneralConsultation newAppointmentGeneral = new GeneralConsultation(patient, doctor, description, date, location, preAppointmentInstructions, Duration.ofHours(1));
                     patient.bookAppointment(newAppointmentGeneral);
                     doctor.scheduleAppointment(newAppointmentGeneral);
                 }
                 case "follow" -> {
-                    FollowUp newAppointmentFollow = new FollowUp(patient, doctor, description, date, location, preAppointmentInstructions);
+                    FollowUp newAppointmentFollow = new FollowUp(patient, doctor, description, date, location, preAppointmentInstructions, Duration.ofHours(1));
                     patient.bookAppointment(newAppointmentFollow);
                     doctor.scheduleAppointment(newAppointmentFollow);
                 }
                 case "surgery" -> {
-                    Surgery newAppointmentSurgery = new Surgery(patient, doctor, description, date, location, preAppointmentInstructions);
+                    Surgery newAppointmentSurgery = new Surgery(patient, doctor, description, date, location, preAppointmentInstructions, Duration.ofHours(1));
                     patient.bookAppointment(newAppointmentSurgery);
                     doctor.scheduleAppointment(newAppointmentSurgery);
                 }
@@ -108,8 +108,11 @@ public class Receptionist extends Person {
             return false;
         }
     }
-
+//String firstName, String lastName, String email, String phoneNum, String ID, String medicalRecordNum, Doctor doctor, String medicalRecord
     public void addPatient(String firstName, String lastName, String phoneNumber, String email, Doctor doctor) {
-        this.getLocation().addPatient(new Patient(firstName, lastName, email, phoneNumber, firstName, lastName, phoneNumber, doctor, email));
+        Patient newPaitient = new Patient(firstName, lastName, email, phoneNumber, "12", "3", doctor, "");
+        this.getLocation().addPatient(newPaitient);
+        //if new patient, no appointment exists yet
+        this.checkInPatient(newPaitient, null);
     }
 }
