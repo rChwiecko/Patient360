@@ -1,8 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-import Patient360.backend.api.models.exceptions.DoctorManagementException;
-
+import Patient360.backend.api.models.exceptions.DoctorManagementException;;
 
 public class Hospital {
     private String address;
@@ -54,26 +53,6 @@ public class Hospital {
         return patients;
     }
 
-    /**
-     * change patients doctor
-     * @param patient
-     * @param doctor
-     * @return true if success, return false if any problems occur
-     */
-    public boolean changeDoctor(Patient patient, Doctor doctor){
-        //prevent null pointer exception
-        if (patient == null){
-            return false;
-        }
-        try {
-            patient.setDoctor(doctor);
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
-
-
     public void addDoctor(Doctor newDoctor) throws DoctorManagementException{
         for (Doctor doctor: this.doctors){
             if (doctor.getFirstName().equals(newDoctor.getFirstName()) && doctor.getLastName().equals(newDoctor.getLastName())){
@@ -83,7 +62,11 @@ public class Hospital {
         this.doctors.add(newDoctor);
     }
 
-
+    /**
+     * removes patient from the patientsPresent list
+     * @param newPatient
+     * @throws PatientManagementException
+     */
     public void checkPatientOut(Patient newPatient) throws PatientManagementException{
         boolean found = false;
         for (Patient patient: this.patientsPresent){

@@ -2,7 +2,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+import Patient360.backend.api.models.exceptions.AppointmentException;
 
 public class Receptionist extends Person {
     private String workShift;
@@ -18,7 +18,32 @@ public class Receptionist extends Person {
     }
 
     // Methods
-    public void cancelAppointment(Appointment appointment) {
+
+    /**
+     * change patients doctor
+     * @param patient
+     * @param doctor
+     * @return true if success, return false if any problems occur
+     */
+    public boolean changeDoctor(Patient patient, Doctor doctor){
+        //prevent null pointer exception
+        if (patient == null){
+            return false;
+        }
+        try {
+            patient.setDoctor(doctor);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * 
+     * @param appointment
+     */
+    public void cancelAppointment(Appointment appointment) throws AppointmentException{
         handledAppointments.remove(appointment);
 
         // Remove from relevant doctor's appointment list
