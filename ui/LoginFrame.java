@@ -90,7 +90,6 @@ public class LoginFrame extends JFrame
                 new StartingScreen();  // Open the StartingScreen
             }
         });
-        
         // Set the window to be visible
         setVisible(true);
     }
