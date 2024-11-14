@@ -1,5 +1,4 @@
 
-import Patient360.backend.api.models.exceptions.DoctorManagementException;
 
 public class main {
     public static void main(String[] args) {

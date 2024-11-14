@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
-
-import Patient360.backend.api.models.exceptions.DoctorManagementException;;
-
+import exceptions.*;
 public class Hospital {
     private String address;
     private String department;

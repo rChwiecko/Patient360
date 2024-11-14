@@ -2,7 +2,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import Patient360.backend.api.models.exceptions.AppointmentException;
 
 public class Receptionist extends Person {
     private String workShift;
@@ -40,10 +39,14 @@ public class Receptionist extends Person {
 
 
     /**
-     * 
+     * remove appointment from doctor and patient attributes
      * @param appointment
      */
     public void cancelAppointment(Appointment appointment) throws AppointmentException{
+        if (appointment == null){
+            throw new AppointmentException("Empty appointment");
+        }
+        
         handledAppointments.remove(appointment);
 
         // Remove from relevant doctor's appointment list
