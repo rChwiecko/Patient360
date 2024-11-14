@@ -1,6 +1,10 @@
 
 
 public class main {
+    
+    /** 
+     * @param args
+     */
     public static void main(String[] args) {
         Hospital childrensHospital = new Hospital("plaeground stret", "general", 10000);
         Receptionist sonia = new Receptionist("Sonia", "Sharma", "idk@gmai.com", "idk", "123", "night", childrensHospital);

@@ -20,6 +20,10 @@ public class Doctor extends Person {
     }
 
 
+    
+    /** 
+     * @param newAppointment
+     */
     public void scheduleAppointment(Appointment newAppointment) {
         this.appointments.add(newAppointment);
     }
@@ -40,7 +44,9 @@ public class Doctor extends Person {
         return this.appointments;
     }
     
-
+    /** 
+     * @param reqeustedTime
+     */
     public boolean isAvailable(LocalDateTime requestedTime, Duration appointmentDuration) {
         for (Appointment appointment : this.appointments) {
             LocalDateTime start = appointment.getDate();

@@ -17,6 +17,10 @@ public class Person {
     }
 
     // Methods
+    
+    /** 
+     * @return String
+     */
     public String getRole() {
         // Implementation
         return null;

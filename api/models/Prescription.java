@@ -28,6 +28,10 @@ public class Prescription {
     }
 
     // Methods
+    
+    /** 
+     * @return String
+     */
     public String getPrescriptionId() {
         return prescriptionId;
     }

@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import exceptions.*;
 public class Hospital {
     private String address;
     private String department;
@@ -22,6 +21,10 @@ public class Hospital {
     }
 
     // Methods
+    
+    /** 
+     * @return boolean
+     */
     public boolean checkCapacity() {
         // Implementation
         return false;

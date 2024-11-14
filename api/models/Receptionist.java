@@ -24,6 +24,12 @@ public class Receptionist extends Person {
      * @param doctor
      * @return true if success, return false if any problems occur
      */
+    
+    /** 
+     * @param patient
+     * @param doctor
+     * @return boolean
+     */
     public boolean changeDoctor(Patient patient, Doctor doctor){
         //prevent null pointer exception
         if (patient == null){
@@ -60,6 +66,7 @@ public class Receptionist extends Person {
         }
     }
 
+    
     public void managePatientRecord(Patient patient, String additionalRecord, Prescription newPrescription) {
         if (additionalRecord != null){
             patient.updateMedicalRecord(additionalRecord);
@@ -70,6 +77,7 @@ public class Receptionist extends Person {
 
     }
 
+    
     public boolean checkInPatient(Patient patient, Appointment appointment) {
         if (patient != null){
             patient.checkIn();

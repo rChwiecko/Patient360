@@ -24,6 +24,11 @@ public class Patient extends Person {
     }
 
     // Methods
+    
+    /** 
+     * 
+     * @param appointment
+     */
     public void bookAppointment(Appointment appointment) {
         this.getAppointments().add(appointment);
     }
