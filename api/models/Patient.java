@@ -3,6 +3,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import Observer.Observer;
+
 public class Patient extends Person {
     private String medicalRecordNum;
     private List<Prescription> currentMedications;

@@ -1,4 +1,4 @@
 {
   "java.configuration.updateBuildConfiguration": "interactive",
-  "java.project.sourcePaths": ["api/models/exceptions"]
+  "java.project.sourcePaths": ["api/models/exceptions", "api/models"]
 }
