@@ -3,7 +3,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import Observer.Observer;
+import observer.Observer;
 
 public class Patient extends Person {
     private String medicalRecordNum;
