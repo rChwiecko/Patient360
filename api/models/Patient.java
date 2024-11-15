@@ -3,7 +3,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Patient extends Person {
     private String medicalRecordNum;
     private List<Prescription> currentMedications;
@@ -11,7 +10,7 @@ public class Patient extends Person {
     private Doctor doctor;
     private String medicalRecord;
     private boolean checkIn;
-
+    private List<Observer> observers = new ArrayList<>();
     // Constructor
     public Patient(String firstName, String lastName, String email, String phoneNum, String ID, String medicalRecordNum, Doctor doctor, String medicalRecord) {
         super(firstName, lastName, email, phoneNum, ID);
@@ -20,31 +19,45 @@ public class Patient extends Person {
         this.doctor = doctor;
         this.medicalRecord = medicalRecord;
         this.appointments = new ArrayList<>();
-        this.checkIn = true; //assumes patient is at the hospital checked in when they are created
+        this.checkIn = true; // assumes patient is at the hospital checked in when they are created
     }
 
-    // Methods
-    
-    /** 
-     * 
-     * @param appointment
+    /**
+     * Books a new appointment for the patient.
+     *
+     * @param appointment the appointment to be booked
      */
     public void bookAppointment(Appointment appointment) {
-        this.getAppointments().add(appointment);
+        this.appointments.add(appointment);
     }
 
+    /**
+     * Adds a record to the patient's medical history.
+     *
+     * @param record the medical history record to add
+     */
     public void addMedicalHistory(String record) {
-        String str = "--"+record+"--";
+        String str = "--" + record + "--";
         this.updateMedicalRecord(str);
     }
 
+    /**
+     * Gets the list of current medications.
+     *
+     * @return list of prescriptions
+     */
     public List<Prescription> getCurrentMedications() {
         return currentMedications;
     }
 
+    /**
+     * Finds and returns the closest future appointment from today.
+     *
+     * @return the next appointment, or null if none exist
+     */
     public Appointment getNextAppointment() {
         if (appointments == null || appointments.isEmpty()) {
-            return null; // Return null if the list is empty
+            return null;
         }
 
         LocalDate today = LocalDate.now();
@@ -64,35 +77,78 @@ public class Patient extends Person {
         return closestAppointment;
     }
 
+    /**
+     * Gets the medical record of the patient.
+     *
+     * @return the patient's medical record
+     */
     public String getMedicalRecord() {
         return medicalRecord;
     }
 
-    public List<Appointment> getAppointments(){
+    /**
+     * Gets the list of all appointments.
+     *
+     * @return list of appointments
+     */
+    public List<Appointment> getAppointments() {
         return this.appointments;
     }
 
-    public void updateMedicalRecord(String additional){
+    /**
+     * Updates the patient's medical record with additional information.
+     *
+     * @param additional additional information to append to the medical record
+     */
+    public void updateMedicalRecord(String additional) {
         this.medicalRecord += additional;
     }
 
-    public List<Prescription> getPrescriptions(){
-        return this.currentMedications;
+    /**
+     * Adds a prescription to the current medications list.
+     *
+     * @param newPres the prescription to add
+     */
+    public void addPrescription(Prescription newPres) {
+        this.currentMedications.add(newPres);
+        notifyObservers("A new prescription has been added: " + newPres.getPrescriptionDetails());
     }
 
-    public void addPrescription(Prescription newPres){
-        this.getCurrentMedications().add(newPres);
-    }
-
-    public void checkIn(){
+    /**
+     * Marks the patient as checked in to the hospital.
+     */
+    public void checkIn() {
         this.checkIn = true;
     }
 
-    public void checkOut(){
+    /**
+     * Marks the patient as checked out from the hospital.
+     */
+    public void checkOut() {
         this.checkIn = false;
     }
 
-    public void setDoctor(Doctor newDoctor){
+    /**
+     * Updates the patient's assigned doctor.
+     *
+     * @param newDoctor the new doctor to assign
+     */
+    public void setDoctor(Doctor newDoctor) {
         this.doctor = newDoctor;
     }
+
+
+
+        // Method to add an observer
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    // Method to notify all observers
+    private void notifyObservers(String message) {
+        for (Observer observer : observers) {
+            observer.update(message);
+        }
+    }
+
 }
