@@ -126,23 +126,19 @@ public class Receptionist extends Person {
     //returns false if the creation was not successful (ie, doctor was not available)
     public boolean makeAppointment(Patient patient, Doctor doctor, String appointmentType, String description, LocalDateTime date, Hospital location, Duration appointmentDuration, String preAppointmentInstructions){
         if (doctor.isAvailable(date, appointmentDuration)){
-            switch (appointmentType){
-                case "general" -> {
-                    GeneralConsultation newAppointmentGeneral = new GeneralConsultation(patient, doctor, description, date, location, preAppointmentInstructions, Duration.ofHours(1));
-                    patient.bookAppointment(newAppointmentGeneral);
-                    doctor.scheduleAppointment(newAppointmentGeneral);
-                }
-                case "follow" -> {
-                    FollowUp newAppointmentFollow = new FollowUp(patient, doctor, description, date, location, preAppointmentInstructions, Duration.ofHours(1));
-                    patient.bookAppointment(newAppointmentFollow);
-                    doctor.scheduleAppointment(newAppointmentFollow);
-                }
-                case "surgery" -> {
-                    Surgery newAppointmentSurgery = new Surgery(patient, doctor, description, date, location, preAppointmentInstructions, Duration.ofHours(1));
-                    patient.bookAppointment(newAppointmentSurgery);
-                    doctor.scheduleAppointment(newAppointmentSurgery);
-                }
+            AppointmentFactory factory;
+            switch (appointmentType.toLowerCase()) {
+                case "general" -> factory = new GeneralConsultationFactory();
+                case "follow" -> factory = new FollowUpFactory();
+                case "surgery" -> factory = new SurgeryFactory();
+                default -> throw new IllegalArgumentException("Unknown appointment type: " + appointmentType);
             }
+            Appointment appointment = factory.createAppointment(patient, doctor, description, date, location, preAppointmentInstructions, appointmentDuration);
+
+            // Book and schedule the appointment
+            patient.bookAppointment(appointment);
+            doctor.scheduleAppointment(appointment);
+        
             return true;
         }
         else{
