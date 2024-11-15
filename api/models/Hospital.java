@@ -1,23 +1,21 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import composite.HospitalMember;
 public class Hospital {
     private String address;
     private String department;
     private int capacity;
     private List<Patient> patientsPresent;
-    private List<Doctor> doctors;
-    private List<Receptionist> receptionists;
-    private List<Patient> patients;
-
+    private List<HospitalMember> members;
     // Constructor
     public Hospital(String address, String department, int capacity) {
         this.address = address;
         this.department = department;
         this.capacity = capacity;
         this.patientsPresent = new ArrayList<>();
-        this.doctors = new ArrayList<>();
-        this.receptionists = new ArrayList<>();
-        this.patients = new ArrayList<>();
+        this.members = new ArrayList<>();
     }
 
     // Methods
@@ -42,25 +40,35 @@ public class Hospital {
         return patientsPresent;
     }
 
-    public List<Doctor> getDoctors() {
-        return doctors;
-    }
-
     public List<Receptionist> getReceptionists() {
-        return receptionists;
+        return members.stream()
+                .filter(member -> member instanceof Receptionist)
+                .map(member -> (Receptionist) member)
+                .collect(Collectors.toList());
+    }
+    
+    public List<Patient> getPatients() {
+        return members.stream()
+                .filter(member -> member instanceof Patient)
+                .map(member -> (Patient) member)
+                .collect(Collectors.toList());
     }
 
-    public List<Patient> getPatients() {
-        return patients;
+
+    public List<Doctor> getDoctors() {
+        return members.stream()
+                .filter(member -> member instanceof Doctor)
+                .map(member -> (Doctor) member)
+                .collect(Collectors.toList());
     }
 
     public void addDoctor(Doctor newDoctor) throws DoctorManagementException{
-        for (Doctor doctor: this.doctors){
+        for (Doctor doctor: this.getDoctors()){
             if (doctor.getFirstName().equals(newDoctor.getFirstName()) && doctor.getLastName().equals(newDoctor.getLastName())){
                 throw new DoctorManagementException("Doctor already exists");
             }
         }
-        this.doctors.add(newDoctor);
+        this.members.add(newDoctor);
     }
 
     /**
@@ -70,7 +78,7 @@ public class Hospital {
      */
     public void checkPatientOut(Patient newPatient) throws PatientManagementException{
         boolean found = false;
-        for (Patient patient: this.patientsPresent){
+        for (Patient patient: this.getPatientsPresent()){
             if (patient.getFirstName().equals(patient.getFirstName()) && patient.getLastName().equals(patient.getLastName())){
                 found = true;
             }

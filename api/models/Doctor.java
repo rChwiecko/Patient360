@@ -2,7 +2,9 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-public class Doctor extends Person {
+
+import composite.HospitalMember;
+public class Doctor extends Person implements HospitalMember{
     private String specialization;
     private int yearsOfExperience;
     private List<Patient> patients;
@@ -30,6 +32,11 @@ public class Doctor extends Person {
 
     public String getSpecialization() {
         return specialization;
+    }
+
+    @Override
+    public String getRole(){
+        return "Doctor";
     }
 
     public List<Patient> getPatients() {

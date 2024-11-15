@@ -3,9 +3,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import composite.HospitalMember;
 import observer.Observer;
 
-public class Patient extends Person {
+public class Patient extends Person implements HospitalMember{
     private String medicalRecordNum;
     private List<Prescription> currentMedications;
     private List<Appointment> appointments;
@@ -22,6 +23,11 @@ public class Patient extends Person {
         this.medicalRecord = medicalRecord;
         this.appointments = new ArrayList<>();
         this.checkIn = true; // assumes patient is at the hospital checked in when they are created
+    }
+
+    @Override
+    public String getRole(){
+        return "Patient";
     }
 
     /**

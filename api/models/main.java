@@ -41,6 +41,7 @@ public class main {
         Prescription pres = new Prescription(null, p1, null, null, null, null, null, null, null, 0);
         sonia.managePatientRecord(p2, "This patient was prescribed pres", pres);
         System.out.println(p2.getCurrentMedications());
+        System.out.println(childrensHospital.getDoctors());
         // boolean a2Result = sonia.makeAppointment(p2, doctor4, "general", "ear checkup", LocalDateTime.of(2024, 11, 15, 14, 00), childrensHospital, Duration.ofMinutes(30), "clean ears");
         // if (a1Result){
         //     System.out.println("Patient 1's appointment was booked");

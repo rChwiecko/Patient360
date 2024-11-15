@@ -3,7 +3,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Receptionist extends Person {
+import composite.HospitalMember;
+
+public class Receptionist extends Person implements HospitalMember{
     private String workShift;
     private List<Appointment> handledAppointments;
     private Hospital recepHospital;
@@ -18,12 +20,11 @@ public class Receptionist extends Person {
 
     // Methods
 
-    /**
-     * change patients doctor
-     * @param patient
-     * @param doctor
-     * @return true if success, return false if any problems occur
-     */
+    @Override
+    public String getRole(){
+        return "Receptionist";
+    }
+
     
     /** 
      * @param patient
