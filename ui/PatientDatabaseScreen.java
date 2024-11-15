@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PatientDatabaseScreen extends JFrame {
+
     public PatientDatabaseScreen() {
         // Set up the frame
         setTitle("Access Patient Database");
@@ -10,42 +11,50 @@ public class PatientDatabaseScreen extends JFrame {
 
         // Create the main panel
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));  // Stack components vertically
-        mainPanel.setBackground(Color.WHITE);  // Set the background of this panel to white
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBackground(Color.WHITE);
 
-        // Create the logo panel (using null layout to position logo manually)
+        // Create the logo panel
         JPanel logoPanel = new JPanel();
-        logoPanel.setLayout(null);  // Use null layout to manually position the logo
-        logoPanel.setBackground(Color.WHITE);  // Set background to white for consistency
+        logoPanel.setLayout(null);
+        logoPanel.setBackground(Color.WHITE);
 
         // Load and scale the logo image
         ImageIcon image1 = new ImageIcon("ui/imgs/Patient360Logo.png");
         Image scaledImage = image1.getImage().getScaledInstance(200, 100, Image.SCALE_SMOOTH);
-        image1 = new ImageIcon(scaledImage);  // Set the resized image back to ImageIcon
+        image1 = new ImageIcon(scaledImage);
 
-        // Add the image icon to a JLabel and position it
         JLabel imageLabel = new JLabel(image1);
-        imageLabel.setBounds(20, 20, image1.getIconWidth(), image1.getIconHeight());  // Position logo at the top-left corner
+        imageLabel.setBounds(20, 20, image1.getIconWidth(), image1.getIconHeight());
 
-        // Add the logo to the logoPanel
         logoPanel.add(imageLabel);
-
-        // Add logo panel to the main panel
         mainPanel.add(logoPanel);
-
-        // Add some vertical spacing between logo and text
         mainPanel.add(Box.createVerticalStrut(20));
 
-        // Create a label to indicate this is the Access Database screen
+        // Create a label for the Patient Database screen
         JLabel label = new JLabel("This is the Access Patient Database screen.");
-        label.setFont(new Font("Arial", Font.PLAIN, 20));  // Increase font size for visibility
-        label.setHorizontalAlignment(SwingConstants.CENTER);  // Center align the label text
-        mainPanel.add(label);  // Add the label to the main panel
+        label.setFont(new Font("Arial", Font.PLAIN, 20));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        mainPanel.add(label);
 
-        // Add the main panel to the content pane
+        // Create a back button
+        JButton backButton = new JButton("Back");
+        backButton.setPreferredSize(new Dimension(150, 50));
+        backButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        backButton.addActionListener(e -> {
+            dispose();
+            new StartingScreen();  // Go back to the starting screen
+        });
+
+        // Add back button at the bottom
+        JPanel backButtonPanel = new JPanel();
+        backButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        backButtonPanel.setBackground(Color.WHITE);
+        backButtonPanel.add(backButton);
+
+        mainPanel.add(backButtonPanel);
+
         getContentPane().add(mainPanel);
-
-        // Make the window visible
         setVisible(true);
     }
 
@@ -53,3 +62,4 @@ public class PatientDatabaseScreen extends JFrame {
         new PatientDatabaseScreen();
     }
 }
+

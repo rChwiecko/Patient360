@@ -1,5 +1,5 @@
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
 
 public class BookAppointmentScreen extends JFrame {
 
@@ -42,6 +42,24 @@ public class BookAppointmentScreen extends JFrame {
         label.setFont(new Font("Arial", Font.PLAIN, 20));  // Increase font size for visibility
         label.setHorizontalAlignment(SwingConstants.CENTER);  // Center align the label text
         mainPanel.add(label);  // Add the label to the main panel
+
+        // Create a back button and add action listener
+        JButton backButton = new JButton("Back");
+        backButton.setPreferredSize(new Dimension(150, 50));
+        backButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        backButton.addActionListener(e -> {
+            dispose();
+            new StartingScreen();  // Go back to the starting screen
+        });
+
+        // Add back button to the panel at the bottom
+        JPanel backButtonPanel = new JPanel();
+        backButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        backButtonPanel.setBackground(Color.WHITE);
+        backButtonPanel.add(backButton);
+
+        // Add backButtonPanel to the main panel
+        mainPanel.add(backButtonPanel);
 
         // Add the main panel to the content pane
         getContentPane().add(mainPanel);
