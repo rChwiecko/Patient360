@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import composite.HospitalMember;
-import observer.Observer;
+import Observer.Observer;
 
 public class Patient extends Person implements HospitalMember{
     private String medicalRecordNum;
