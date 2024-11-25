@@ -1,10 +1,9 @@
+import Observer.Observer;
+import composite.HospitalMember;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-
-import composite.HospitalMember;
-import Observer.Observer;
 
 public class Patient extends Person implements HospitalMember{
     private String medicalRecordNum;
@@ -157,6 +156,14 @@ public class Patient extends Person implements HospitalMember{
         for (Observer observer : observers) {
             observer.update(message);
         }
+    }
+
+    /**
+     * returns patients check in status, ("are they checked into this hospital or not?")
+     * @return checkIn
+     */
+    public boolean getCheckIn(){
+        return this.checkIn;
     }
 
 }

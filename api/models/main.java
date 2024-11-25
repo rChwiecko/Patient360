@@ -1,4 +1,5 @@
-
+import java.time.Duration;
+import java.time.LocalDateTime;
 public class main {
     
     /** 
@@ -23,7 +24,39 @@ public class main {
             System.out.println("Doctor already at that hospital");
         }
 
+        //Functionality 1: adding a patient
+        Patient p1 = new Patient("Ryan","Chwiecko","rchwiec@uwo.ca", "123-456-7891","P2345","",doctor2,"");
+        Patient p2 = new Patient("Sonia","Sharma","sshar@uwo.ca", "987-654-3211","P23456","",doctor3,"");
+        try {
+            childrensHospital.addPatient(p1);
+            childrensHospital.addPatient(p2);
+            childrensHospital.addPatient(p2);
+        } catch (PatientManagementException e) {
+            System.out.println("Patient already at hospital");
+        }
+        /*
+        Patient patient, Doctor doctor, String description, LocalDateTime date, Hospital location, String preAppointmentInstructions, Duration appointmentDuration
+         */
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        Duration thirtyMinutes = Duration.ofMinutes(30);
+        
+        //Functionality 2: receptionist being able to cancel and make new appointments and give pre appointment instructions
+        recep1.makeAppointment(p2, doctor4, "general", "Consultation with Dr. Smith", currentDateTime, childrensHospital, thirtyMinutes, "Drink water prior to appointment, no caffeine");
+        recep1.checkInPatient(p2, null);
+        System.out.println(doctor4.getAppointments().get(0).getLocation());   //will output the location of doctor 4's first appointment
+        try {
+            recep1.cancelAppointment(doctor4.getAppointments().get(0));
+        } catch (AppointmentException e) {
+            System.out.println("Appointment doesnt exist");
+        }
+        System.out.println(doctor4.getAppointments());  //will be empty because the appointment was cancelled
 
+        //functionality 3: updating patient records
+        Prescription newPrescription = new Prescription("123", p2, "Tyloneol", "1 Pill", "Twice daily", "2024/11/25", "2025/01/01", "Take one in the morning, and one before bed", 2);
+        recep1.managePatientRecord(p2, null, newPrescription);   //can leave second param null to only add a new prescription
+        recep1.managePatientRecord(p2, "Patient gets frequent headaches", null);   //leave third param null to only add additional record 
+        System.out.println(p2.getCurrentMedications());
+        System.out.println(p2.getMedicalRecord());
     }
 }
 

@@ -14,13 +14,12 @@ public class Prescription {
 
     // Constructor
     public Prescription(String prescriptionId, Patient patient, String medicationName, String dosage, String frequency,
-                        String duration, String prescriptionDate, String expiryDate, String instructions, int refillCount) {
+                        String prescriptionDate, String expiryDate, String instructions, int refillCount) {
         this.prescriptionId = prescriptionId;
         this.patient = patient;
         this.medicationName = medicationName;
         this.dosage = dosage;
         this.frequency = frequency;
-        this.duration = duration;
         this.prescriptionDate = prescriptionDate;
         this.expiryDate = expiryDate;
         this.instructions = instructions;
@@ -52,10 +51,6 @@ public class Prescription {
         return frequency;
     }
 
-    public String getDuration() {
-        return duration;
-    }
-
     public String getPrescriptionDate() {
         return prescriptionDate;
     }
@@ -73,17 +68,17 @@ public class Prescription {
     }
 
     public boolean isExpired() {
-        // Implementation
+        // to be implemented
         return false;
     }
 
     public boolean canRefill() {
-        // Implementation
+        // to be implemented
         return false;
     }
 
     public String getPrescriptionDetails() {
-        // Implementation
+        // to be implemented
         return null;
     }
 }

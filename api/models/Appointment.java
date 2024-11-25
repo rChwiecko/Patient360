@@ -22,7 +22,6 @@ abstract class Appointment {
         this.status = "incomplete";
         this.preAppointmentInstructions = preAppointmentInstructions;
         this.duration =  appointmentDuration;
-        //fill in with email logic for pre instructions
     }
 
     // Methods
