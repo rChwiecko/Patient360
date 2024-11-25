@@ -32,7 +32,7 @@
 
 ---
 
-### **Front End** *(to be fully implemented in the third deliverable)*
+### **Front End** _(to be fully implemented in the third deliverable)_
 
 - **LoginFrame.java**: Receptionist has to verify their credentials to enter the system.
 - **StartingScreen.java**: This is the main screen, guiding the receptionist on what task they would like to accomplish in the system.
@@ -48,6 +48,7 @@
 This project is built as a **desktop application** using **JavaFX** and **Swing** for the user interface. The system is designed for efficiency, maintainability, and scalability, with a focus on delivering core functionalities.
 
 ### **Key Technologies**
+
 - **JavaFX**: For building a responsive user interface.
 - **Swing**: For additional UI components.
 - **Java**: Core implementation language.
@@ -64,19 +65,26 @@ This project is built as a **desktop application** using **JavaFX** and **Swing*
 
 ---
 
+### **Production Branch**
+
+- The **main** branch is the production branch and contains the most up-to-date and stable code.
+
 ## Running the Application
 
 To run the application, follow these steps:
 
 1. **Ensure your environment is set up**:
+
    - Make sure you have a Java Development Kit (JDK) installed (preferably version 8 or higher).
    - Set up your IDE (e.g., IntelliJ IDEA, Eclipse, or VS Code) to recognize the project's structure and dependencies.
 
 2. **Compile the project**:
+
    - Open the project in your IDE.
    - Build the project to ensure there are no compilation errors.
 
 3. **Run the `main.java` file**:
+
    - Locate `main.java` in the project's file structure.
    - Right-click on `main.java` and select `Run` (or execute it through the command line if you're using a terminal).
    - Example command line execution:
@@ -86,6 +94,7 @@ To run the application, follow these steps:
      ```
 
 4. **Follow the prompts**:
+
    - After the application starts, follow the on-screen instructions to interact with the system.
 
 5. **Notes**:
@@ -93,4 +102,3 @@ To run the application, follow these steps:
    - If running in an IDE, ensure that the project uses the correct configuration to run the main method.
 
 Enjoy using **Patient360**!
-
