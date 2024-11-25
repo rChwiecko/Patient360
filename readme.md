@@ -66,4 +66,31 @@ This project is built as a **desktop application** using **JavaFX** and **Swing*
 
 ## Running the Application
 
-- Details about how to run the application will be provided in subsequent updates.
+To run the application, follow these steps:
+
+1. **Ensure your environment is set up**:
+   - Make sure you have a Java Development Kit (JDK) installed (preferably version 8 or higher).
+   - Set up your IDE (e.g., IntelliJ IDEA, Eclipse, or VS Code) to recognize the project's structure and dependencies.
+
+2. **Compile the project**:
+   - Open the project in your IDE.
+   - Build the project to ensure there are no compilation errors.
+
+3. **Run the `main.java` file**:
+   - Locate `main.java` in the project's file structure.
+   - Right-click on `main.java` and select `Run` (or execute it through the command line if you're using a terminal).
+   - Example command line execution:
+     ```bash
+     javac main.java
+     java main
+     ```
+
+4. **Follow the prompts**:
+   - After the application starts, follow the on-screen instructions to interact with the system.
+
+5. **Notes**:
+   - Ensure the application is connected to the correct UI files (if front-end components are included).
+   - If running in an IDE, ensure that the project uses the correct configuration to run the main method.
+
+Enjoy using **Patient360**!
+
