@@ -63,11 +63,11 @@ This project is built as a **desktop application** using **JavaFX** and **Swing*
 - **`/.DS_Store`**: Metadata file (commonly auto-generated in macOS environments).
 - **`/readme.md`**: The file containing details regarding the project.
 
----
-
 ### **Production Branch**
 
 - The **main** branch is the production branch and contains the most up-to-date and stable code.
+
+---
 
 ## Running the Application
 
