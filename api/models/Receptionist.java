@@ -1,9 +1,8 @@
+import composite.HospitalMember;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import composite.HospitalMember;
 
 public class Receptionist extends Person implements HospitalMember{
     private String workShift;
@@ -124,11 +123,23 @@ public class Receptionist extends Person implements HospitalMember{
         this.recepHospital = newHospital;
     }
 
-    //returns false if the creation was not successful (ie, doctor was not available)
+    /**
+     * 
+     * @param patient
+     * @param doctor
+     * @param appointmentType
+     * @param description
+     * @param date
+     * @param location
+     * @param appointmentDuration
+     * @param preAppointmentInstructions
+     * @return Bool
+     */
     public boolean makeAppointment(Patient patient, Doctor doctor, String appointmentType, String description, LocalDateTime date, Hospital location, Duration appointmentDuration, String preAppointmentInstructions){
         if (doctor.isAvailable(date, appointmentDuration)){
             AppointmentFactory factory;
             switch (appointmentType.toLowerCase()) {
+                //utilization of factor method
                 case "general" -> factory = new GeneralConsultationFactory();
                 case "follow" -> factory = new FollowUpFactory();
                 case "surgery" -> factory = new SurgeryFactory();
@@ -139,7 +150,6 @@ public class Receptionist extends Person implements HospitalMember{
             // Book and schedule the appointment
             patient.bookAppointment(appointment);
             doctor.scheduleAppointment(appointment);
-        
             return true;
         }
         else{

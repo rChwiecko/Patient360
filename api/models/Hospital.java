@@ -1,8 +1,7 @@
+import composite.HospitalMember;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import composite.HospitalMember;
 public class Hospital {
     private String address;
     private String department;
@@ -24,8 +23,7 @@ public class Hospital {
      * @return boolean
      */
     public boolean checkCapacity() {
-        // Implementation
-        return false;
+        return this.patientsPresent.size() < getCapacity();
     }
 
     public String getAddress() {
@@ -86,7 +84,8 @@ public class Hospital {
         if (!found){
             throw new PatientManagementException("Patient was never check in");
         }else{
-            
+            this.patientsPresent.remove(newPatient);
+            setCapacity(getCapacity()-1);
         }
 
     }
@@ -102,7 +101,8 @@ public class Hospital {
                 throw new PatientManagementException("Patient already checked in");
             }
         }
-        this.getPatientsPresent().add(newPatient);
+        this.patientsPresent.add(newPatient);
+        setCapacity(getCapacity() + 1);
     }
 
 
@@ -118,7 +118,23 @@ public class Hospital {
                 throw new PatientManagementException("Patient already checked in");
             }
         }
-        this.getPatients().add(newPatient);
+        this.members.add(newPatient);
+    }
+
+    /**
+     * getter for capacity
+     * @return capacity
+     */
+    public int getCapacity(){
+        return this.capacity;
+    }
+
+    /**
+     * setter for capacity
+     * @param newCapacity
+     */
+    public void setCapacity(int newCapacity){
+        this.capacity =  newCapacity;
     }
 }
 

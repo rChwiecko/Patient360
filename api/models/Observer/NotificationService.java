@@ -1,4 +1,4 @@
-package observer;
+package Observer;
 public class NotificationService implements Observer {
     @Override
     public void update(String message) {
