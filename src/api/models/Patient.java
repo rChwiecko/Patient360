@@ -1,6 +1,6 @@
-package models;
-import Observer.Observer;
-import composite.HospitalMember;
+package api.models;
+import api.models.Observer.*;
+import api.models.composite.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;

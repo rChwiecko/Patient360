@@ -1,3 +1,6 @@
+package api.models.exceptions;
+
+
 public class PatientManagementException extends Exception {
     
     // Default constructor

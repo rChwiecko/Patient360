@@ -1,3 +1,6 @@
+package api.models;
+
+import api.models.exceptions.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 public class main {

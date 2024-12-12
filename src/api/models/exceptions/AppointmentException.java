@@ -1,3 +1,6 @@
+package api.models.exceptions;
+
+
 public class AppointmentException extends Exception {
     
     // Default constructor

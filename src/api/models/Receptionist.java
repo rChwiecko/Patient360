@@ -1,4 +1,8 @@
-import composite.HospitalMember;
+package api.models;
+
+
+import api.models.composite.*;
+import api.models.exceptions.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

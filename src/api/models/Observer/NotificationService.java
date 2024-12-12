@@ -1,4 +1,4 @@
-package Observer;
+package api.models.Observer;
 public class NotificationService implements Observer {
     @Override
     public void update(String message) {

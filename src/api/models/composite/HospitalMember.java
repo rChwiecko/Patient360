@@ -1,4 +1,4 @@
-package composite;
+package api.models.composite;
 
 public interface HospitalMember {
     String getFirstName();

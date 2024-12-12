@@ -1,4 +1,7 @@
-import composite.HospitalMember;
+package api.models;
+
+import api.models.composite.*;
+import api.models.exceptions.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

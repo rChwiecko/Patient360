@@ -1,3 +1,6 @@
+package api.models;
+
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 public class FollowUp extends Appointment {

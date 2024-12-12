@@ -1,4 +1,4 @@
 {
   "java.configuration.updateBuildConfiguration": "interactive",
-  "java.project.sourcePaths": ["api"]
+  "java.project.sourcePaths": ["src"]
 }

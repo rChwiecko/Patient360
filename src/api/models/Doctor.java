@@ -1,9 +1,11 @@
+package api.models;
+
+
+import api.models.composite.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import composite.HospitalMember;
 public class Doctor extends Person implements HospitalMember{
     private String specialization;
     private int yearsOfExperience;
