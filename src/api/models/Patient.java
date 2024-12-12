@@ -1,3 +1,4 @@
+package models;
 import Observer.Observer;
 import composite.HospitalMember;
 import java.time.LocalDate;
