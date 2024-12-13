@@ -60,9 +60,11 @@ public class PatientDatabaseScreen extends JFrame {
         getContentPane().add(mainPanel);
         setVisible(true);
     }
-
+    /* 
     public static void main(String[] args) {
         new PatientDatabaseScreen();
-    }
+    }*/
 }
+
+// manage patient record screen, access list of patrients and add prescription, fill out some fields for it and save 
 

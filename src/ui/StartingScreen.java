@@ -111,6 +111,7 @@ public class StartingScreen extends JFrame {
                 // Action when the back button is clicked
                 dispose();  // Close the current screen
                 new StartingScreen();  // Open the starting screen again (or navigate to another screen)
+                System.exit(ABORT);
             }
         });
 
@@ -141,9 +142,10 @@ public class StartingScreen extends JFrame {
         button.setFocusPainted(false);  // Remove focus border
         return button;
     }
-
+}
+/*
     // The main method to test the StartingScreen independently
     public static void main(String[] args) {
         new StartingScreen();  // Open the starting screen directly for testing
     }
-}
+} */

@@ -1,10 +1,22 @@
 package ui;
 
-
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class BookAppointmentScreen extends JFrame {
+
+    // List of doctors and their availability (boolean matrix)
+    private String[] doctors = {"Dr. Smith", "Dr. Johnson", "Dr. Williams", "Dr. Brown"};
+    private boolean[][] availability = {
+        {true, true, false, true, false, true, false, true, true, false, true, true, false, false, true},  // Dr. Smith
+        {false, true, true, true, false, true, true, false, true, false, true, false, true, true, true},  // Dr. Johnson
+        {true, true, true, false, false, false, true, true, true, true, false, false, true, false, true},  // Dr. Williams
+        {false, false, false, true, true, true, false, false, false, false, false, false, true, true, false}  // Dr. Brown
+    };
+
+    private JPanel availabilityPanel;
 
     public BookAppointmentScreen() {
         // Set up the frame
@@ -41,12 +53,16 @@ public class BookAppointmentScreen extends JFrame {
         mainPanel.add(Box.createVerticalStrut(20));
 
         // Create a label to indicate this is the Book Appointment screen
-        JLabel label = new JLabel("This is the Book Appointment screen.");
+        JLabel label = new JLabel("Select a time slot available");
         label.setFont(new Font("Arial", Font.PLAIN, 20));  // Increase font size for visibility
         label.setHorizontalAlignment(SwingConstants.CENTER);  // Center align the label text
         mainPanel.add(label);  // Add the label to the main panel
 
-        // Create a back button and add action listener
+        // Create a split pane for doctor list and availability grid
+        JSplitPane splitPane = createSplitPane();
+        mainPanel.add(splitPane);
+
+        // Add back button
         JButton backButton = new JButton("Back");
         backButton.setPreferredSize(new Dimension(150, 50));
         backButton.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -71,7 +87,63 @@ public class BookAppointmentScreen extends JFrame {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new BookAppointmentScreen();
+    private JSplitPane createSplitPane() {
+        // Create the left panel with the doctor list
+        DefaultListModel<String> model = new DefaultListModel<>();
+        for (String doctor : doctors) {
+            model.addElement(doctor);
+        }
+        JList<String> doctorList = new JList<>(model);
+        doctorList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        doctorList.setSelectedIndex(0);
+        doctorList.addListSelectionListener(e -> updateAvailability());
+
+        JScrollPane doctorListScrollPane = new JScrollPane(doctorList);
+        doctorListScrollPane.setPreferredSize(new Dimension(200, 0));
+
+        // Create the right panel for availability
+        availabilityPanel = new JPanel();
+        availabilityPanel.setLayout(new GridLayout(0, 15));  // Use GridLayout to arrange time slots
+        updateAvailability();  // Initial update for the first doctor
+
+        // Split the panels horizontally
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, doctorListScrollPane, new JScrollPane(availabilityPanel));
+        splitPane.setDividerLocation(200); // Set divider location to give space for the list
+
+        return splitPane;
     }
+
+    private void updateAvailability() {
+        availabilityPanel.removeAll();
+        int selectedDoctorIndex = 0;  // Default to first doctor, will update dynamically on selection
+
+        // Create time slots (30 min increments)
+        for (int i = 0; i < 15; i++) {
+            String time = String.format("%02d:%02d", 9 + i / 2, (i % 2) * 30);
+            JLabel timeLabel = new JLabel(time, SwingConstants.CENTER);
+            timeLabel.setPreferredSize(new Dimension(60, 30));  // Size of the time label
+            availabilityPanel.add(timeLabel);  // Add time label to the grid
+        }
+
+        // Create availability blocks (blue for available, grey for unavailable)
+        for (boolean available : availability[selectedDoctorIndex]) {
+            JButton button = new JButton();
+            button.setPreferredSize(new Dimension(30, 30));  // Size of the availability button
+            if (available) {
+                button.setBackground(Color.BLUE);  // Blue if available
+            } else {
+                button.setBackground(Color.GRAY);  // Gray if not available
+            }
+            button.setEnabled(available);  // Disable button if not available
+            availabilityPanel.add(button);  // Add button to the grid
+        }
+
+        availabilityPanel.revalidate();
+        availabilityPanel.repaint();  // Refresh the panel to reflect changes
+    }
+    /* 
+    public static void main(String[] args) 
+    {
+        new BookAppointmentScreen();
+    }*/
 }
