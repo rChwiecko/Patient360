@@ -61,7 +61,7 @@ abstract class Appointment {
     }
 
     public Hospital getLocation() {
-        return location;
+        return this.location;
     }
 
     public String getAppointmentStatus(){
