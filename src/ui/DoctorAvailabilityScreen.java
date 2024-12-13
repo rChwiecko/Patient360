@@ -35,7 +35,7 @@ public class DoctorAvailabilityScreen extends JFrame {
         mainPanel.add(Box.createVerticalStrut(20));
 
         // Create a label for the Doctor Availability screen
-        JLabel label = new JLabel("This is the View Doctor Availability screen.");
+        JLabel label = new JLabel("Check to see our doctor's Availability");
         label.setFont(new Font("Arial", Font.PLAIN, 20));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         mainPanel.add(label);
@@ -60,8 +60,8 @@ public class DoctorAvailabilityScreen extends JFrame {
         getContentPane().add(mainPanel);
         setVisible(true);
     }
-
+/* 
     public static void main(String[] args) {
         new DoctorAvailabilityScreen();
-    }
+    }*/
 }

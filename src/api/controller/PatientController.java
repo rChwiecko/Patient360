@@ -8,6 +8,7 @@ public class PatientController{
     private Hospital hospital;
     private List<Doctor> doctors;
     private List<Patient> patients;
+
     private Receptionist receptionist;
     public PatientController(Receptionist receptionist){
         this.hospital = receptionist.getLocation();
@@ -70,6 +71,5 @@ public class PatientController{
     public boolean bookAppointment(Patient patient, Doctor doctor, String appointmentType, String description, LocalDateTime date, Hospital location, Duration appointmentDuration, String preAppointmentInstructions){
         return this.getReceptionist().makeAppointment(patient, doctor, appointmentType, description, date, location, appointmentDuration, preAppointmentInstructions);
     }
-    
     
 } 
