@@ -4,13 +4,25 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.List;
 
 public class CheckInPatientScreen extends JFrame {
 
     private static DefaultListModel<String> patientsModel = new DefaultListModel<>();
+    private static final int SCREEN_WIDTH = 1900;
+    private static final int SCREEN_HEIGHT = 650;
+
+    private static final Map<String, List<String>> patientAppointments = new HashMap<>();
+
+    static {
+        patientAppointments.put("John Doe", Arrays.asList("2024-12-20 at 10:00 AM", "2024-12-25 at 2:00 PM"));
+        patientAppointments.put("Jane Smith", Collections.singletonList("2024-12-18 at 1:00 PM"));
+        patientAppointments.put("Alice Johnson", Arrays.asList("2024-12-19 at 9:30 AM", "2024-12-22 at 11:00 AM"));
+    }
 
     public CheckInPatientScreen() {
-        // Add some dummy patients for demonstration
         if (patientsModel.isEmpty()) {
             patientsModel.addElement("John Doe");
             patientsModel.addElement("Jane Smith");
@@ -18,8 +30,8 @@ public class CheckInPatientScreen extends JFrame {
         }
 
         setTitle("Check-in Patient");
-        setSize(1900, 650);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -30,18 +42,17 @@ public class CheckInPatientScreen extends JFrame {
         label.setHorizontalAlignment(SwingConstants.CENTER);
         mainPanel.add(label);
 
-        // Display patient list
         JList<String> patientList = new JList<>(patientsModel);
         patientList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         patientList.setFont(new Font("Arial", Font.PLAIN, 16));
 
-        // Add a mouse listener to handle selection
         patientList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Double-click to select a patient
+                if (e.getClickCount() == 2) {
                     String selectedPatient = patientList.getSelectedValue();
                     if (selectedPatient != null) {
+                        dispose(); // Close current screen
                         showCheckInOptions(selectedPatient);
                     }
                 }
@@ -57,7 +68,7 @@ public class CheckInPatientScreen extends JFrame {
         backButton.setFont(new Font("Arial", Font.PLAIN, 14));
         backButton.addActionListener(e -> {
             dispose();
-            new StartingScreen(); // Navigate to StartingScreen
+            new StartingScreen(); 
         });
 
         JPanel backButtonPanel = new JPanel();
@@ -72,11 +83,25 @@ public class CheckInPatientScreen extends JFrame {
 
     private void showCheckInOptions(String patientName) {
         JFrame optionsFrame = new JFrame("Check-in Options for " + patientName);
-        optionsFrame.setSize(400, 300);
+        optionsFrame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         optionsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel optionsPanel = new JPanel();
         optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));
+
+        JLabel appointmentsLabel = new JLabel("Future Appointments:");
+        appointmentsLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        optionsPanel.add(appointmentsLabel);
+
+        List<String> appointments = patientAppointments.getOrDefault(patientName, new ArrayList<>());
+        DefaultListModel<String> appointmentListModel = new DefaultListModel<>();
+        appointments.forEach(appointmentListModel::addElement);
+
+        JList<String> appointmentList = new JList<>(appointmentListModel);
+        appointmentList.setFont(new Font("Arial", Font.PLAIN, 14));
+        JScrollPane appointmentScrollPane = new JScrollPane(appointmentList);
+        appointmentScrollPane.setPreferredSize(new Dimension(500, 200));
+        optionsPanel.add(appointmentScrollPane);
 
         JButton walkInButton = new JButton("Walk-in");
         walkInButton.addActionListener(e -> {
@@ -86,11 +111,19 @@ public class CheckInPatientScreen extends JFrame {
 
         JButton appointmentButton = new JButton("Appointment");
         appointmentButton.addActionListener(e -> {
-            optionsFrame.dispose();
-            checkAppointment(patientName);
+            String selectedAppointment = appointmentList.getSelectedValue();
+            if (selectedAppointment != null) {
+                int confirm = JOptionPane.showConfirmDialog(optionsFrame, "Confirm check-in for " + patientName + " on " + selectedAppointment + "?", "Check Appointment", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    JOptionPane.showMessageDialog(optionsFrame, "Appointment status for " + patientName + " is now 'Ongoing'.");
+                    optionsFrame.dispose();
+                    new CheckInPatientScreen();
+                }
+            } else {
+                JOptionPane.showMessageDialog(optionsFrame, "Please select an appointment to check-in.");
+            }
         });
 
-        optionsPanel.add(new JLabel("Select Check-in Option:"));
         optionsPanel.add(walkInButton);
         optionsPanel.add(appointmentButton);
 
@@ -99,51 +132,71 @@ public class CheckInPatientScreen extends JFrame {
     }
 
     private void showWalkInForm(String patientName) {
-        JFrame walkInFrame = new JFrame("Walk-in Details for " + patientName);
-        walkInFrame.setSize(400, 300);
-        walkInFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    JFrame walkInFrame = new JFrame("Walk-in Details for " + patientName);
+    walkInFrame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    walkInFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        JPanel walkInPanel = new JPanel();
-        walkInPanel.setLayout(new BoxLayout(walkInPanel, BoxLayout.Y_AXIS));
+    JPanel walkInPanel = new JPanel();
+    walkInPanel.setLayout(new BoxLayout(walkInPanel, BoxLayout.Y_AXIS));
 
-        JTextField reasonField = new JTextField();
-        reasonField.setPreferredSize(new Dimension(250, 30));
-        walkInPanel.add(new JLabel("Reason for Visit:"));
-        walkInPanel.add(reasonField);
+    JTextField reasonField = new JTextField();
+    reasonField.setPreferredSize(new Dimension(250, 30));
+    walkInPanel.add(new JLabel("Reason for Visit:"));
+    walkInPanel.add(reasonField);
 
-        String[] doctors = {"Dr. Smith", "Dr. Johnson", "Dr. Williams", "Dr. Brown"};
-        JComboBox<String> doctorDropdown = new JComboBox<>(doctors);
-        walkInPanel.add(new JLabel("Select Doctor:"));
-        walkInPanel.add(doctorDropdown);
+    String[] doctors = {"Dr. Smith", "Dr. Johnson", "Dr. Williams", "Dr. Brown"};
+    JComboBox<String> doctorDropdown = new JComboBox<>(doctors);
+    walkInPanel.add(new JLabel("Select Doctor:"));
+    walkInPanel.add(doctorDropdown);
 
-        JButton saveButton = new JButton("Save");
-        saveButton.addActionListener(e -> {
-            String reason = reasonField.getText();
-            String selectedDoctor = (String) doctorDropdown.getSelectedItem();
+    String[] appointmentTypes = {"Surgery", "Follow-up", "General Consultation"};
+    JComboBox<String> appointmentTypeDropdown = new JComboBox<>(appointmentTypes);
+    walkInPanel.add(new JLabel("Appointment Type:"));
+    walkInPanel.add(appointmentTypeDropdown);
 
-            if (!reason.isEmpty() && selectedDoctor != null) {
-                JOptionPane.showMessageDialog(walkInFrame, "Walk-in saved for " + patientName + " with " + selectedDoctor + ": " + reason);
-                walkInFrame.dispose();
-            } else {
-                JOptionPane.showMessageDialog(walkInFrame, "Please fill all fields.");
-            }
-        });
+    JTextField locationField = new JTextField();
+    locationField.setPreferredSize(new Dimension(250, 30));
+    walkInPanel.add(new JLabel("Location:"));
+    walkInPanel.add(locationField);
 
-        walkInPanel.add(saveButton);
-        walkInFrame.add(walkInPanel);
-        walkInFrame.setVisible(true);
-    }
+    JTextField durationField = new JTextField();
+    durationField.setPreferredSize(new Dimension(250, 30));
+    walkInPanel.add(new JLabel("Duration (in minutes):"));
+    walkInPanel.add(durationField);
 
-    private void checkAppointment(String patientName) {
-        int confirm = JOptionPane.showConfirmDialog(this, "Confirm check-in for " + patientName + "?", "Check Appointment", JOptionPane.YES_NO_OPTION);
-        if (confirm == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(this, "Appointment status for " + patientName + " is now 'Ongoing'.");
+    JTextField dateField = new JTextField();
+    dateField.setPreferredSize(new Dimension(250, 30));
+    walkInPanel.add(new JLabel("Appointment Date (YYYY-MM-DD):"));
+    walkInPanel.add(dateField);
+
+    JButton saveButton = new JButton("Save");
+    saveButton.addActionListener(e -> {
+        String reason = reasonField.getText();
+        String selectedDoctor = (String) doctorDropdown.getSelectedItem();
+        String appointmentType = (String) appointmentTypeDropdown.getSelectedItem();
+        String location = locationField.getText();
+        String duration = durationField.getText();
+        String appointmentDate = dateField.getText();
+
+        // Validate the input
+        if (!reason.isEmpty() && selectedDoctor != null && appointmentType != null &&
+            !location.isEmpty() && !duration.isEmpty() && !appointmentDate.isEmpty()) {
+            JOptionPane.showMessageDialog(walkInFrame, "Walk-in saved for " + patientName + " with Dr. " + selectedDoctor + 
+                ": " + appointmentType + " on " + appointmentDate + ".\nLocation: " + location + "\nDuration: " + duration + " mins");
+            
+            JOptionPane.showMessageDialog(walkInFrame, "Appointment status for " + patientName + " is now 'Ongoing'.");
+            
+            walkInFrame.dispose(); 
+            new CheckInPatientScreen(); 
+        } else {
+            JOptionPane.showMessageDialog(walkInFrame, "Please fill all fields.");
         }
-    }
-    /* 
-    public static void main(String[] args) {
-        new CheckInPatientScreen();
-    }*/
+    });
+
+    walkInPanel.add(saveButton);
+    walkInFrame.add(walkInPanel);
+    walkInFrame.setVisible(true);
+    
+    }   
+
 }
-
-
