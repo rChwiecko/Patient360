@@ -2,7 +2,12 @@ import api.models.*;
 import api.models.exceptions.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
+
+import ui.UiMain;
+
+
 public class Main {
+    public static Receptionist recep1;
     
     /** 
      * @param args
@@ -11,7 +16,7 @@ public class Main {
         //creation of hospital
         Hospital childrensHospital = new Hospital("plaeground stret", "general", 10000);
         //creation of receptionist
-        Receptionist recep1 = new Receptionist("Bill", "Reid", "example@gmai.com", "123-456-7891", "123", "night", childrensHospital);
+        recep1 = new Receptionist("Bill", "Reid", "example@gmai.com", "123-456-7891", "123", "night", childrensHospital);
         //creation of doctor objects
         Doctor doctor1 = new Doctor("John", "Doe", "johndoe@example.com", "1234567890", "D001", "Cardiology", 15, true);
         Doctor doctor2 = new Doctor("Jane", "Smith", "janesmith@example.com", "0987654321", "D002", "Neurology", 10, true);
@@ -38,7 +43,9 @@ public class Main {
         LocalDateTime currentDateTime = LocalDateTime.now();
         Duration thirtyMinutes = Duration.ofMinutes(30);
         recep1.makeAppointment(p2, doctor4, "general", "Consultation with Dr. Smith", currentDateTime, childrensHospital, thirtyMinutes, "Drink water prior to appointment, no caffeine");
-    
+        
+        UiMain ui_of_program = new UiMain();
+        ui_of_program.receiveInformation(recep1);
         
     }
 }

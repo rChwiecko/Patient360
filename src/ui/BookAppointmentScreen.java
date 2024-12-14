@@ -1,6 +1,9 @@
 package ui;
 
 import javax.swing.*;
+
+import api.controller.PatientController;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +21,12 @@ public class BookAppointmentScreen extends JFrame {
 
     private JPanel availabilityPanel;
 
-    public BookAppointmentScreen() {
+    // Declare patientController as a class field
+    private PatientController patientController;
+
+    public BookAppointmentScreen(PatientController patientController) {
+        this.patientController = patientController;
+
         setTitle("Book an Appointment");
         setSize(1900, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,7 +74,7 @@ public class BookAppointmentScreen extends JFrame {
         backButton.setFont(new Font("Arial", Font.PLAIN, 14));
         backButton.addActionListener(e -> {
             dispose();
-            new StartingScreen();  // Go back to the starting screen
+            new StartingScreen(patientController);  // Go back to the starting screen
         });
 
         // Add back button to the panel at the bottom

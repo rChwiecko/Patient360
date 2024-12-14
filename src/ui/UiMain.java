@@ -1,80 +1,24 @@
 package ui;
 
 import api.controller.PatientController;
-import api.models.Hospital;
+import api.models.Receptionist;
 
+public class UiMain {
 
-public class UiMain 
-{
-    /* 
-    void recieveInformation (Hospital hospital)
-    {
-        // create a patient controller object 
-        PatientController controller = new PatientController(hospital);
-
-        //controller.
-
-        // double loop doctor list first loop iterating through list 
-        // second loop will create each block (time slot) in increments of 30 minutes 
-        // blue available, grey not available 
-
-    }*/
-
-    public static void main(String[] args) 
-    {
-        launchLogin();
-    }
-    public static void launchLogin() 
-    {
-        LoginFrame myFrame = new LoginFrame();
-        myFrame.initialize();
-    } 
-
-    public static void launchStartingScreen() 
-    {
-        new StartingScreen();
+    // Constructor doesn't need to recursively instantiate a new UiMain
+    public UiMain() {
+        // Constructor can be empty or perform other setup if necessary
     }
 
-    public static void launchCheckInPatientScreen() {
-        new CheckInPatientScreen();
-    }
+    // Corrected method name and added appropriate parameter
+    public void receiveInformation(Receptionist receptionist) {
+        // Create a PatientController object
+        PatientController controller = new PatientController(receptionist);
 
-    public static void launchBookAppointmentScreen() {
-        new BookAppointmentScreen();
-    }
-
-    public static void launchDoctorAvailabilityScreen() {
-        new DoctorAvailabilityScreen();
-    }
-
-    
-}
-
-/*
- * package ui;
-
-public class MainUIController {
-    public static void main(String[] args) {
-        launchStartingScreen(); // Entry point
-    }
-
-    public static void launchCheckInPatientScreen() {
-        new CheckInPatientScreen();
-    }
-
-    public static void launchStartingScreen() {
-        // Implement the logic to show your starting screen.
-        System.out.println("Starting screen placeholder.");
-        // Example: new StartingScreen();
-    }
-
-    public static void launchBookAppointmentScreen() {
-        new BookAppointmentScreen();
-    }
-
-    public static void launchDoctorAvailabilityScreen() {
-        new DoctorAvailabilityScreen();
+        // Create an instance of LoginFrame and pass the controller to it
+        LoginFrame myFrame = new LoginFrame(controller);
+        myFrame.initialize(); // Assuming LoginFrame is a GUI class that initializes the login screen
     }
 }
 
- */
+
