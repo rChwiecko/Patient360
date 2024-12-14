@@ -19,15 +19,13 @@ public class BookAppointmentScreen extends JFrame {
     private JPanel availabilityPanel;
 
     public BookAppointmentScreen() {
-        // Set up the frame
         setTitle("Book an Appointment");
         setSize(1900, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Create the main panel
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));  // Stack components vertically
-        mainPanel.setBackground(Color.WHITE);  // Set the background of this panel to white
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS)); 
+        mainPanel.setBackground(Color.WHITE);  
 
         // Create the logo panel (using null layout to position logo manually)
         JPanel logoPanel = new JPanel();

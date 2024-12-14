@@ -33,8 +33,8 @@ public class LoginFrame extends JFrame
         centerPanel.setBackground(Color.WHITE);  // Set the background of this panel to white
         
         // Load the image icon
-        ImageIcon image1 = new ImageIcon("./imgs/Patient360Logo.png");
-        ImageIcon image2 = new ImageIcon("./imgs/profilepic.png");
+        ImageIcon image1 = new ImageIcon("src/ui/imgs/Patient360Logo.png");
+        ImageIcon image2 = new ImageIcon("src/ui/imgs/profilepic.png");
 
         // Resize the image (example: make it smaller, 200x100 px)
         Image scaledImage = image1.getImage().getScaledInstance(200, 100, Image.SCALE_SMOOTH);
