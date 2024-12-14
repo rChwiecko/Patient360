@@ -72,4 +72,23 @@ public class PatientController{
         return this.getReceptionist().makeAppointment(patient, doctor, appointmentType, description, date, location, appointmentDuration, preAppointmentInstructions);
     }
     
+    /**
+     * @param patient
+     * @param appointment
+     * @return
+     */
+    public boolean checkInPatient(Patient patient, Appointment appointment){
+        return this.getReceptionist().checkInPatient(patient, appointment);
+    }
+
+
+    /**
+     * @param patient
+     * @param appointment
+     * @return
+     */
+    public boolean checkOutPatient(Patient patient, Appointment appointment){
+        return this.getReceptionist().checkOutPatient(patient, appointment);
+    }
+
 } 
