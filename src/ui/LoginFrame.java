@@ -3,6 +3,10 @@ package ui;
 
 import java.awt.*;
 import javax.swing.*;
+
+import api.controller.PatientController;
+import api.models.Receptionist;
+
 import java.awt.event.*;
 
 public class LoginFrame extends JFrame
@@ -12,6 +16,14 @@ public class LoginFrame extends JFrame
     private static JLabel passwordLabel = new JLabel("Password:");
     private static JTextField textbox2 = new JTextField(15);
     private static JButton usernameVerifyButton = new JButton("Verify");
+    
+    // Declare patientController as a class field
+    private PatientController patientController;
+
+    public LoginFrame(PatientController patientController) {
+        this.patientController = patientController;
+        initialize();
+    }
 
     public void initialize()
     {
@@ -90,7 +102,7 @@ public class LoginFrame extends JFrame
                 dispose();
 
                 // Open the StartingScreen
-                new StartingScreen();  // Open the StartingScreen
+                new StartingScreen(patientController);  // Open the StartingScreen
             }
         });
         // Set the window to be visible

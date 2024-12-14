@@ -1,5 +1,6 @@
 package ui;
 
+import api.controller.PatientController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,8 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class StartingScreen extends JFrame {
+    private PatientController patientController;
 
-    public StartingScreen() {
+    public StartingScreen(PatientController patientController) 
+    {
         // Set up the frame
         setTitle("Starting Screen");
         setSize(1900, 650);
@@ -63,7 +66,7 @@ public class StartingScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Open the Book Appointment screen
                 dispose();
-                new BookAppointmentScreen();
+                new BookAppointmentScreen(patientController);
             }
         });
 
@@ -72,7 +75,7 @@ public class StartingScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Open the View Doctor Availability screen
                 dispose();
-                new DoctorAvailabilityScreen();
+                new DoctorAvailabilityScreen(patientController);
             }
         });
 
@@ -81,7 +84,7 @@ public class StartingScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Open the Access Patient Database screen
                 dispose();
-                new PatientDatabaseScreen();
+                new PatientDatabaseScreen(patientController);
             }
         });
 
@@ -90,7 +93,7 @@ public class StartingScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Open the Check-in Patient screen
                 dispose();
-                new CheckInPatientScreen();
+                new CheckInPatientScreen(patientController);
             }
         });
 
@@ -110,7 +113,7 @@ public class StartingScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Action when the back button is clicked
                 dispose();  // Close the current screen
-                new StartingScreen();  // Open the starting screen again (or navigate to another screen)
+                new StartingScreen(patientController);  // Open the starting screen again (or navigate to another screen)
                 System.exit(ABORT);
             }
         });

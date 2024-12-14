@@ -3,10 +3,14 @@ package ui;
 
 import java.awt.*;
 import javax.swing.*;
+import api.controller.PatientController;
 
 public class PatientDatabaseScreen extends JFrame {
+    // Declare patientController as a class field
+    private PatientController patientController;
 
-    public PatientDatabaseScreen() {
+    public PatientDatabaseScreen(PatientController patientController) {
+        this.patientController = patientController;
         // Set up the frame
         setTitle("Access Patient Database");
         setSize(1900, 650);
@@ -46,7 +50,7 @@ public class PatientDatabaseScreen extends JFrame {
         backButton.setFont(new Font("Arial", Font.PLAIN, 14));
         backButton.addActionListener(e -> {
             dispose();
-            new StartingScreen();  // Go back to the starting screen
+            new StartingScreen(patientController);  // Go back to the starting screen
         });
 
         // Add back button at the bottom
