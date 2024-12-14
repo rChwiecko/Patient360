@@ -9,6 +9,7 @@ import api.models.Patient;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 
@@ -96,65 +97,154 @@ public class CheckInPatientScreen extends JFrame {
         JFrame optionsFrame = new JFrame("Check-in Options for " + patient.getFirstName());
         optionsFrame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         optionsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
+    
         JPanel optionsPanel = new JPanel();
         optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));
-
+    
         JLabel appointmentsLabel = new JLabel("Future Appointments:");
         appointmentsLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         optionsPanel.add(appointmentsLabel);
-
+    
         // Fetch appointments dynamically from the Patient object
-        List<Appointment> appointments = patient.getAppointments(); // Assuming getAppointments returns a List<Appointment>
-
-        // Create a DefaultListModel to hold the appointment strings
-        DefaultListModel<String> appointmentListModel = new DefaultListModel<>();
-        
-        // Convert each Appointment to a string representation (using toString or custom formatting)
-        for (Appointment appointment : appointments) {
-            appointmentListModel.addElement(appointment.toString()); // Assuming Appointment has a meaningful toString() method
+        List<Appointment> appointments = patient.getAppointments(); // Get the patient's appointments
+    
+        // Create a DefaultListModel to hold the appointment panels
+        JPanel appointmentPanelContainer = new JPanel();
+        appointmentPanelContainer.setLayout(new BoxLayout(appointmentPanelContainer, BoxLayout.Y_AXIS));
+    
+        // Convert each Appointment to a detailed string representation
+        if (appointments != null && !appointments.isEmpty()) {
+            for (Appointment appointment : appointments) {
+                JPanel appointmentPanel = createAppointmentPanel(appointment); // Create a JPanel for each appointment
+                appointmentPanelContainer.add(appointmentPanel);
+            }
+        } else {
+            JLabel noAppointmentsLabel = new JLabel("No appointments scheduled.");
+            noAppointmentsLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            appointmentPanelContainer.add(noAppointmentsLabel);
         }
-
-        // Set the JList with the DefaultListModel
-        JList<String> appointmentList = new JList<>(appointmentListModel);
-        appointmentList.setFont(new Font("Arial", Font.PLAIN, 14));
-        JScrollPane appointmentScrollPane = new JScrollPane(appointmentList);
-        appointmentScrollPane.setPreferredSize(new Dimension(500, 200));
+    
+        JScrollPane appointmentScrollPane = new JScrollPane(appointmentPanelContainer);
+        appointmentScrollPane.setPreferredSize(new Dimension(500, 400));
         optionsPanel.add(appointmentScrollPane);
-
+    
         // Walk-in Button action
         JButton walkInButton = new JButton("Walk-in");
         walkInButton.addActionListener(e -> {
             optionsFrame.dispose();
             showWalkInForm(patient);
         });
-
-        // Appointment Button action
+    
+        // Appointment Button action (for appointment check-in)
         JButton appointmentButton = new JButton("Appointment");
         appointmentButton.addActionListener(e -> {
-            String selectedAppointment = appointmentList.getSelectedValue();
+            // Handle appointment selection and check-in
+            String selectedAppointmentDate = JOptionPane.showInputDialog(optionsFrame, "Please select the appointment date (e.g., 2024-12-15 10:00):");
+            
+            // Find the appointment with the selected date
+            Appointment selectedAppointment = null;
+            for (Appointment appointment : appointments) {
+                String appointmentDate = appointment.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                if (appointmentDate.equals(selectedAppointmentDate)) {
+                    selectedAppointment = appointment;
+                    break;
+                }
+            }
+    
+            // If the appointment is found, process the check-in
             if (selectedAppointment != null) {
                 int confirm = JOptionPane.showConfirmDialog(optionsFrame, 
-                        "Confirm check-in for " + patient.getFirstName() + " on " + selectedAppointment + "?", 
+                        "Confirm check-in for " + patient.getFirstName() + " on " + selectedAppointmentDate + "?", 
                         "Check Appointment", JOptionPane.YES_NO_OPTION);
+    
                 if (confirm == JOptionPane.YES_OPTION) {
-                    JOptionPane.showMessageDialog(optionsFrame, 
-                            "Appointment status for " + patient.getFirstName()+ " is now 'Ongoing'.");
+                    // Change appointment status to "ongoing"
+                    selectedAppointment.updateStatus("ongoing");
+    
+                    // Update patient status or any other related information
+                    JOptionPane.showMessageDialog(optionsFrame, "Appointment for " + patient.getFirstName() + " is now 'Ongoing'.");
+                    
+                    // Close the frame after check-in
                     optionsFrame.dispose();
-                    new CheckInPatientScreen(patientController); // Assuming you're navigating back to CheckInPatientScreen
+                    
+                    // Optionally, navigate back or show a confirmation screen
+                    new CheckInPatientScreen(patientController);
                 }
             } else {
-                JOptionPane.showMessageDialog(optionsFrame, "Please select an appointment to check-in.");
+                JOptionPane.showMessageDialog(optionsFrame, "Appointment not found. Please ensure the date is correct.");
             }
         });
-
+    
         optionsPanel.add(walkInButton);
         optionsPanel.add(appointmentButton);
-
+    
         optionsFrame.add(optionsPanel);
         optionsFrame.setVisible(true);
     }
+    
 
+// Helper method to create the appointment panel with collapsible details
+private JPanel createAppointmentPanel(Appointment appointment) {
+    JPanel appointmentPanel = new JPanel();
+    appointmentPanel.setLayout(new BoxLayout(appointmentPanel, BoxLayout.Y_AXIS));
+    appointmentPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+    // Create the title (date of appointment)
+    String appointmentDate = appointment.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    JLabel titleLabel = new JLabel(appointmentDate);
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+    titleLabel.setForeground(Color.BLUE);
+
+    // Create the details panel (hidden by default)
+    JPanel detailsPanel = new JPanel();
+    detailsPanel.setLayout(new BoxLayout(detailsPanel, BoxLayout.Y_AXIS));
+    detailsPanel.setVisible(false);  // Start as hidden
+
+    // Format the appointment details
+    String doctorName = appointment.getDoctor().getFirstName() + " " + appointment.getDoctor().getLastName();
+    String appointmentType = appointment.getAppointmentType();
+    String description = appointment.getDescription();
+    String status = appointment.getAppointmentStatus();
+    String location = appointment.getLocation().getAddress(); // Assuming Hospital class has a getName() method
+
+    detailsPanel.add(new JLabel("Doctor: " + doctorName));
+    detailsPanel.add(new JLabel("Type: " + appointmentType));
+    detailsPanel.add(new JLabel("Description: " + description));
+    detailsPanel.add(new JLabel("Status: " + status));
+    detailsPanel.add(new JLabel("Location: " + location));
+
+    // Make the title clickable to toggle the details
+    titleLabel.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            // Toggle visibility of the details panel
+            detailsPanel.setVisible(!detailsPanel.isVisible());
+            appointmentPanel.revalidate();  // Revalidate to update the UI
+            appointmentPanel.repaint();  // Repaint to reflect changes
+        }
+    });
+
+    // Add the title and the details to the appointment panel
+    appointmentPanel.add(titleLabel);
+    appointmentPanel.add(detailsPanel);
+
+    return appointmentPanel;
+}
+
+    
+    // Helper method to format the appointment details into a readable string
+    private String formatAppointmentDetails(Appointment appointment) {
+        String doctorName = appointment.getDoctor().getFirstName() + " " + appointment.getDoctor().getLastName();
+        String appointmentType = appointment.getAppointmentType();
+        String description = appointment.getDescription();
+        String appointmentDate = appointment.getDate().toString(); // Can format this date as needed
+        String status = appointment.getAppointmentStatus();
+        String location = appointment.getLocation().getAddress(); // Assuming Hospital class has a getName() method
+        
+        return String.format("Doctor: %s\nType: %s\nDescription: %s\nDate: %s\nLocation: %s\nStatus: %s", 
+                doctorName, appointmentType, description, appointmentDate, location, status);
+    }
+    
     private void showWalkInForm(Patient patient) {
         JFrame walkInFrame = new JFrame("Walk-in Details for " + patient.getFirstName());
         walkInFrame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);

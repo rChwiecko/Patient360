@@ -42,11 +42,17 @@ public class Main {
         }
         LocalDateTime currentDateTime = LocalDateTime.now();
         Duration thirtyMinutes = Duration.ofMinutes(30);
+        Duration hour = Duration.ofHours(1);
+
+        LocalDateTime tomorrow = LocalDateTime.of(2024, 12, 21, 1, 1, 1);
         recep1.makeAppointment(p2, doctor4, "general", "Consultation with Dr. Smith", currentDateTime, childrensHospital, thirtyMinutes, "Drink water prior to appointment, no caffeine");
+        
+        recep1.makeAppointment(p2, doctor3, "surgery", "Consultation with Dr.Johnson", tomorrow, childrensHospital, hour, "yuh");
         
         UiMain ui_of_program = new UiMain();
         ui_of_program.receiveInformation(recep1);
         
     }
 }
+
 
