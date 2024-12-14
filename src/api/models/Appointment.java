@@ -4,7 +4,7 @@ package api.models;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-abstract class Appointment {
+public abstract class Appointment {
     private Patient patient;
     private Doctor doctor;
     private String appointmentType;
