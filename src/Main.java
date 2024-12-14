@@ -38,8 +38,8 @@ public class Main {
         LocalDateTime currentDateTime = LocalDateTime.now();
         Duration thirtyMinutes = Duration.ofMinutes(30);
         recep1.makeAppointment(p2, doctor4, "general", "Consultation with Dr. Smith", currentDateTime, childrensHospital, thirtyMinutes, "Drink water prior to appointment, no caffeine");
-    
         
+
     }
 }
 
