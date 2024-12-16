@@ -1,13 +1,10 @@
 package ui;
 
 import api.controller.PatientController;
-
-import ui.LoginFrame;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class StartingScreen extends JFrame {
     private PatientController patientController;
@@ -15,7 +12,6 @@ public class StartingScreen extends JFrame {
 
     public StartingScreen(PatientController patientController) 
     {
-        this.username = username;
         // Set up the frame
         setTitle("Starting Screen");
         setSize(1900, 650);
