@@ -11,6 +11,7 @@ public class PatientController{
 
     private Receptionist receptionist;
     public PatientController(Receptionist receptionist){
+        this.receptionist = receptionist;
         this.hospital = receptionist.getLocation();
         this.doctors = hospital.getDoctors();
         this.patients = hospital.getPatients();
