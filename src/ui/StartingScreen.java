@@ -2,6 +2,8 @@ package ui;
 
 import api.controller.PatientController;
 
+import ui.LoginFrame;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,9 +11,11 @@ import java.awt.event.ActionListener;
 
 public class StartingScreen extends JFrame {
     private PatientController patientController;
+    private JTextField username;
 
     public StartingScreen(PatientController patientController) 
     {
+        this.username = username;
         // Set up the frame
         setTitle("Starting Screen");
         setSize(1900, 650);
@@ -40,7 +44,7 @@ public class StartingScreen extends JFrame {
         logoPanel.add(imageLabel);  // Position logo at top-left of the logo panel
 
         // Create a welcome label
-        JLabel welcomeLabel = new JLabel("<html>Welcome, NAME<br>Patient360 offers.....Where would you like to start?</html>", SwingConstants.CENTER);
+        JLabel welcomeLabel = new JLabel("<html>Welcome,"+username.getText() + "<br>Where would you like to start?</html>", SwingConstants.CENTER);
         welcomeLabel.setFont(new Font("Arial", Font.PLAIN, 15));  // Increased font size for better visibility
         welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  // Center the text horizontally
 
@@ -58,7 +62,7 @@ public class StartingScreen extends JFrame {
         JButton bookAppointmentButton = createButton("Book an Appointment", 200, 70);
         JButton viewAvailabilityButton = createButton("View Doctor Availability", 200, 70);
         JButton accessDatabaseButton = createButton("Access Patient Database", 200, 70);
-        JButton checkInPatientButton = createButton("Check-in Patient", 200, 70);
+        JButton checkInPatientButton = createButton("Check-in/out Patient", 200, 70);
 
         // Add action listeners to buttons
         bookAppointmentButton.addActionListener(new ActionListener() {
@@ -88,15 +92,30 @@ public class StartingScreen extends JFrame {
             }
         });
 
-        checkInPatientButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Open the Check-in Patient screen
+        checkInPatientButton.addActionListener(e -> {
+            // Prompt the user to choose between Check-In and Check-Out
+            Object[] options = {"Check-In", "Check-Out"};
+            int choice = JOptionPane.showOptionDialog(
+                this,
+                "Would you like to Check-In or Check-Out a patient?",
+                "Check-In/Out Patient",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+            );
+
+            if (choice == JOptionPane.YES_OPTION) {
+                // User chose Check-In
                 dispose();
                 new CheckInPatientScreen(patientController);
+            } else if (choice == JOptionPane.NO_OPTION) {
+                // User chose Check-Out
+                dispose();
+                new CheckOutPatientScreen(patientController);
             }
         });
-
         // Add buttons to the button panel
         buttonPanel.add(bookAppointmentButton);
         buttonPanel.add(viewAvailabilityButton);

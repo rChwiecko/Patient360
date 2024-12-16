@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.*;
 
 public class CheckInPatientScreen extends JFrame {
+    private JLabel username;
 
     private static DefaultListModel<String> patientsModel = new DefaultListModel<>();
     private static final int SCREEN_WIDTH = 1900;
@@ -128,24 +129,45 @@ public class CheckInPatientScreen extends JFrame {
             showWalkInForm(patient);
         });
 
-        // Appointment Button action
         JButton appointmentButton = new JButton("Appointment");
-        appointmentButton.addActionListener(e -> {
-            String selectedAppointment = appointmentList.getSelectedValue();
+appointmentButton.addActionListener(e -> {
+    String selectedAppointmentDescription = appointmentList.getSelectedValue(); // Get the selected appointment description
+    if (selectedAppointmentDescription != null) {
+        int confirm = JOptionPane.showConfirmDialog(
+                optionsFrame,
+                "Confirm check-in for " + patient.getFirstName() + " on " + selectedAppointmentDescription + "?",
+                "Check Appointment",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Find the selected Appointment object using its description
+            Appointment selectedAppointment = patient.getAppointments().stream()
+                    .filter(appointment -> selectedAppointmentDescription.contains(appointment.getDescription()))
+                    .findFirst()
+                    .orElse(null);
+
             if (selectedAppointment != null) {
-                int confirm = JOptionPane.showConfirmDialog(optionsFrame, 
-                        "Confirm check-in for " + patient.getFirstName() + " on " + selectedAppointment + "?", 
-                        "Check Appointment", JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) {
-                    JOptionPane.showMessageDialog(optionsFrame, 
-                            "Appointment status for " + patient.getFirstName()+ " is now 'Ongoing'.");
-                    optionsFrame.dispose();
-                    new CheckInPatientScreen(patientController); // Assuming you're navigating back to CheckInPatientScreen
-                }
+                // Update the appointment status to "Ongoing"
+                selectedAppointment.updateStatus("Ongoing");
+
+                JOptionPane.showMessageDialog(
+                        optionsFrame,
+                        "Appointment status for " + patient.getFirstName() + " is now 'Ongoing'."
+                );
+
+                // Dispose the options frame and refresh the Check-In screen
+                optionsFrame.dispose();
+                new CheckInPatientScreen(patientController);
             } else {
-                JOptionPane.showMessageDialog(optionsFrame, "Please select an appointment to check-in.");
+                JOptionPane.showMessageDialog(optionsFrame, "Failed to find the selected appointment.");
             }
-        });
+        }
+    } else {
+        JOptionPane.showMessageDialog(optionsFrame, "Please select an appointment to check-in.");
+    }
+});
+
 
         optionsPanel.add(walkInButton);
         optionsPanel.add(appointmentButton);
