@@ -1,16 +1,15 @@
 package ui;
 
-import javax.swing.*;
 import api.controller.PatientController;
 import api.models.Appointment;
 import api.models.Doctor;
 import api.models.Patient;
-
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
+import javax.swing.*;
 
 public class CheckInPatientScreen extends JFrame {
 
@@ -112,7 +111,7 @@ public class CheckInPatientScreen extends JFrame {
         
         // Convert each Appointment to a string representation (using toString or custom formatting)
         for (Appointment appointment : appointments) {
-            appointmentListModel.addElement(appointment.toString()); // Assuming Appointment has a meaningful toString() method
+            appointmentListModel.addElement("Description: "+appointment.getDescription()+"\nAppointment Type: "+appointment.getAppointmentType()); // Assuming Appointment has a meaningful toString() method
         }
 
         // Set the JList with the DefaultListModel
