@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.*;
 
 public class BookAppointmentScreen extends JFrame {
+    private JLabel username;
 
     private final PatientController patientController;
     private final JPanel availabilityPanel;

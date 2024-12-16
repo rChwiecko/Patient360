@@ -6,6 +6,7 @@ import javax.swing.*;
 import api.controller.PatientController;
 
 public class PatientDatabaseScreen extends JFrame {
+    private JLabel username;
     // Declare patientController as a class field
     private PatientController patientController;
 
