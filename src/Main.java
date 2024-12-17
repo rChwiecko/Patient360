@@ -38,7 +38,7 @@ public class Main {
         }
 
         // Creation of patient objects
-        Patient p1 = new Patient("Ryan","Chwiecko","rchwiec@uwo.ca", "123-456-7891","P2345","",doctor2,null);
+        Patient p1 = new Patient("Ryan","Chwiecko","rchwiec@uwo.ca", "123-456-7891","P2345","",doctor2,new ArrayList<>());
         Patient p2 = new Patient("Sonia", "Sharma", "sshar@uwo.ca", "987-654-3211", "P23456", "", doctor3, new ArrayList<>());
         Patient p3 = new Patient("Mark", "Taylor", "marktaylor@example.com", "234-567-8910", "P3333", "", doctor1, new ArrayList<>());
         Patient p4 = new Patient("Lisa", "Chen", "lisachen@example.com", "345-678-9012", "P4444", "", doctor5, new ArrayList<>());

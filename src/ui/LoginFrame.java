@@ -45,8 +45,9 @@ public class LoginFrame extends JFrame {
         centerPanel.setBackground(Color.WHITE);
 
         // Load the image icon
-        ImageIcon image1 = new ImageIcon("src/ui/imgs/Patient360Logo.png");
-        ImageIcon image2 = new ImageIcon("src/ui/imgs/profilepic.png");
+        ImageIcon image1 = new ImageIcon(getClass().getResource("/ui/imgs/Patient360Logo.png"));
+        ImageIcon image2 = new ImageIcon(getClass().getResource("/ui/imgs/profilepic.png"));
+
 
         // Resize the images
         Image scaledImage = image1.getImage().getScaledInstance(200, 100, Image.SCALE_SMOOTH);
@@ -96,9 +97,6 @@ public class LoginFrame extends JFrame {
                 enteredUsername = textbox.getText().trim();
                 enteredPassword = textbox2.getText().trim();
 
-                // Debugging: Print captured values to the console
-                System.out.println("Entered Username: " + enteredUsername);
-                System.out.println("Entered Password: " + enteredPassword);
 
                 // Validation
                 if (enteredUsername.equals(username) && enteredPassword.equals(password)) {

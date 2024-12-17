@@ -29,7 +29,7 @@ public class StartingScreen extends JFrame {
         logoPanel.setBackground(Color.WHITE);  // Set background to white for consistency
 
         // Load and scale the logo image
-        ImageIcon image1 = new ImageIcon("src/ui/imgs/Patient360Logo.png");
+        ImageIcon image1 = new ImageIcon(getClass().getResource("/ui/imgs/Patient360Logo.png"));
         Image scaledImage = image1.getImage().getScaledInstance(200, 100, Image.SCALE_SMOOTH);
         image1 = new ImageIcon(scaledImage);  // Set the resized image back to ImageIcon
         JLabel imageLabel = new JLabel(image1);  // Add the image icon to a JLabel

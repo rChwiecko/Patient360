@@ -193,15 +193,28 @@ public class PatientDatabaseScreen extends JFrame {
     
             panel.add(doctorDropdown);
             panel.add(Box.createVerticalStrut(20));
-    
+            
             // Add Patient Button
             JButton addButton = new JButton("Add Patient");
             addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            addButton.addActionListener(e -> {
-                addPatientAction();
+            addButton.addActionListener(e -> addPatientAction());
+
+            // Cancel Button
+            JButton cancelButton = new JButton("Cancel");
+            cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            cancelButton.addActionListener(e -> {
+                dispose();
+                new PatientDatabaseScreen(patientController);
             });
-    
-            panel.add(addButton);
+
+            // Place buttons in a separate panel with FlowLayout
+            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+            buttonPanel.add(addButton);
+            buttonPanel.add(cancelButton);
+
+            panel.add(Box.createVerticalStrut(10)); // Add spacing
+            panel.add(buttonPanel); // Add the button panel
+
     
             getContentPane().add(panel);
             setVisible(true);
@@ -246,7 +259,7 @@ public class PatientDatabaseScreen extends JFrame {
     private class ModifyPatientScreen extends JFrame {
         public ModifyPatientScreen(Patient patient) {
             setTitle("Modify Patient: " + patient.getFirstName() + " " + patient.getLastName());
-            setSize(500, 300);
+            setSize(500, 350); // Adjusted height for the back button
             setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             setLocationRelativeTo(null); // Center the window
     
@@ -266,9 +279,7 @@ public class PatientDatabaseScreen extends JFrame {
             JButton addPrescriptionButton = new JButton("Add Prescription");
             addPrescriptionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             addPrescriptionButton.setPreferredSize(new Dimension(200, 40));
-            addPrescriptionButton.addActionListener(e -> {
-                new AddPrescriptionScreen(patient); // Open placeholder screen for Add Prescription
-            });
+            addPrescriptionButton.addActionListener(e -> new AddPrescriptionScreen(patient)); // Open Add Prescription
             panel.add(addPrescriptionButton);
             panel.add(Box.createVerticalStrut(20));
     
@@ -276,16 +287,26 @@ public class PatientDatabaseScreen extends JFrame {
             JButton addInfoButton = new JButton("Add Additional Information");
             addInfoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             addInfoButton.setPreferredSize(new Dimension(200, 40));
-            addInfoButton.addActionListener(e -> {
-                new AddInformationScreen(patient); // Open placeholder screen for Additional Information
-            });
+            addInfoButton.addActionListener(e -> new AddInformationScreen(patient)); // Open Additional Info
             panel.add(addInfoButton);
+            panel.add(Box.createVerticalStrut(20));
+    
+            // Back Button
+            JButton backButton = new JButton("Back");
+            backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            backButton.setPreferredSize(new Dimension(150, 40));
+            backButton.addActionListener(e -> {
+                dispose();
+                new PatientDatabaseScreen(patientController); // Return to Patient Database Screen
+            });
+            panel.add(backButton);
             panel.add(Box.createVerticalStrut(20));
     
             // Add the panel to the frame
             getContentPane().add(panel);
             setVisible(true);
         }
+
     
         // Placeholder for Add Prescription Screen
     private class AddPrescriptionScreen extends JFrame {

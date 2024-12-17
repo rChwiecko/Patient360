@@ -14,12 +14,17 @@ public class BookAppointmentScreen extends JFrame {
     private JLabel username;
 
     private final PatientController patientController;
-    private final JPanel availabilityPanel;
+    private JPanel availabilityPanel;
     private Patient selectedPatient;
 
     public BookAppointmentScreen(PatientController patientController) {
         this.patientController = patientController;
         Patient currPatient = selectPatient();
+        if (currPatient == null){
+            dispose();
+            new StartingScreen(patientController);
+            return;
+        }
         setTitle("Book an Appointment");
         setSize(1900, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,7 +43,12 @@ public class BookAppointmentScreen extends JFrame {
         availabilityPanel = new JPanel();
         availabilityPanel.setBackground(Color.WHITE);
 
-        buildAvailabilityTable(currPatient);
+        boolean res = buildAvailabilityTable(currPatient);
+        if (!res){
+            dispose();
+            new StartingScreen(patientController);
+            return;
+        }
 
         JScrollPane scrollPane = new JScrollPane(availabilityPanel, 
             JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -63,7 +73,7 @@ public class BookAppointmentScreen extends JFrame {
         setVisible(true);
     }
 
-    private void buildAvailabilityTable(Patient selectedPatient) {
+    private boolean buildAvailabilityTable(Patient selectedPatient) {
         // Prompt user for date selection via a dialog
         JPanel datePanel = new JPanel(new FlowLayout());
         LocalDate today = LocalDate.now(); // Get today's date
@@ -97,7 +107,8 @@ public class BookAppointmentScreen extends JFrame {
     
         if (result != JOptionPane.OK_OPTION) {
             // If user canceled, just return (no table built)
-            return;
+
+            return false;
         }
     
         int year = (int) yearCombo.getSelectedItem();
@@ -163,6 +174,7 @@ public class BookAppointmentScreen extends JFrame {
     
         availabilityPanel.revalidate();
         availabilityPanel.repaint();
+        return true;
     }
     
     
@@ -304,6 +316,7 @@ public class BookAppointmentScreen extends JFrame {
             cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             cancelButton.addActionListener(e -> {
                 dispose();
+                new StartingScreen(patientController);
             });
     
             panel.add(confirmButton);
@@ -359,7 +372,7 @@ public class BookAppointmentScreen extends JFrame {
                 return selectedPatient;
                 // selectedPatient now holds the chosen patient's object
             }
-        }return selectPatient();
+        }return null;
     }
 
 
