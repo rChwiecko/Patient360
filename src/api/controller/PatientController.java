@@ -8,8 +8,11 @@ public class PatientController{
     private Hospital hospital;
     private List<Doctor> doctors;
     private List<Patient> patients;
-
     private Receptionist receptionist;
+    /**
+     * Constructor for controller class
+     * @param receptionist
+     */
     public PatientController(Receptionist receptionist){
         this.receptionist = receptionist;
         this.hospital = receptionist.getLocation();
@@ -17,22 +20,47 @@ public class PatientController{
         this.patients = hospital.getPatients();
     }
 
+    /**
+     * Getter for patients
+     * @return List of Patients
+     */
     public List<Patient> getPatients(){
         return this.hospital.getPatients();
     }
 
+    /**
+     * Getter for doctors
+     * @return List of Doctors
+     */
     public List<Doctor> getDoctors(){
         return this.hospital.getDoctors();
     }
 
+    /**
+     * Getter for hospital
+     * @return Hospital
+     */
     public Hospital getHospital(){
         return this.hospital;
     }
 
+    /**
+     * Getter for receptionist
+     * @return Receptionist
+     */
     public Receptionist getReceptionist(){
         return this.receptionist;
     }
 
+    /**
+     * Method to add patient to hospital
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param phoneNum
+     * @param doctor
+     * @return True if patient was added successfully, false otherwise
+     */
     public boolean addPatient(String firstName, String lastName, String email, String phoneNum, Doctor doctor){
         try {
             this.getReceptionist().addPatient(firstName, lastName, phoneNum, email, doctor);

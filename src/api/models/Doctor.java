@@ -26,12 +26,17 @@ public class Doctor extends Person implements HospitalMember{
 
     
     /** 
+     * Adds new appointment to the list of appointments
      * @param newAppointment
      */
     public void scheduleAppointment(Appointment newAppointment) {
         this.appointments.add(newAppointment);
     }
 
+    /**
+     * returns Doctors specialization
+     * @return specialization
+     */
     public String getSpecialization() {
         return specialization;
     }
@@ -41,19 +46,24 @@ public class Doctor extends Person implements HospitalMember{
         return "Doctor";
     }
 
+    /**
+     * returns list of patients under that doctor
+     * @return patients
+     */
     public List<Patient> getPatients() {
         return patients;
     }
 
-    public boolean getAvailability() {
-        return availability;
-    }
-
+    /**
+     * getter for list of doctors appointments
+     * @return appointments
+     */
     public List<Appointment> getAppointments(){
         return this.appointments;
     }
     
     /** 
+     * method to check if a doctor is available at a specific time depending on their appointments
      * @param reqeustedTime
      */
     public boolean isAvailable(LocalDateTime requestedTime, Duration appointmentDuration) {

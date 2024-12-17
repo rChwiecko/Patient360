@@ -30,6 +30,7 @@ public abstract class Appointment {
     // Methods
     
     /** 
+     * 
      * @return Patient
      */
     public Patient getPatient() {
