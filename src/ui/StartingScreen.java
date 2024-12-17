@@ -41,7 +41,7 @@ public class StartingScreen extends JFrame {
         logoPanel.add(imageLabel);  // Position logo at top-left of the logo panel
 
         // Create a welcome label
-        JLabel welcomeLabel = new JLabel("<html>Welcome, Name <br>Where would you like to start?</html>", SwingConstants.CENTER);
+        JLabel welcomeLabel = new JLabel("<html>Welcome, </html>"+patientController.getReceptionist().getFirstName()+"<html><br>Where would you like to start?</html>", SwingConstants.CENTER);
         welcomeLabel.setFont(new Font("Arial", Font.PLAIN, 15));  // Increased font size for better visibility
         welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  // Center the text horizontally
 

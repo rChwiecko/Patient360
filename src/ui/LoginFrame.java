@@ -1,33 +1,32 @@
 package ui;
 
-
+import api.controller.PatientController;
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
-import api.controller.PatientController;
-import api.models.Receptionist;
-
-import java.awt.event.*;
-
-public class LoginFrame extends JFrame
-{
+public class LoginFrame extends JFrame {
     private static JLabel usernameLabel = new JLabel("Username:");
     private static JTextField textbox = new JTextField(15);
     private static JLabel passwordLabel = new JLabel("Password:");
     private static JTextField textbox2 = new JTextField(15);
     private static JButton usernameVerifyButton = new JButton("Verify");
+
     private String password = "CS3307";
     private String username = "Recep1";
+
+    // Variables to store input values
+    private String enteredUsername = "";
+    private String enteredPassword = "";
+
     // Declare patientController as a class field
     private PatientController patientController;
 
     public LoginFrame(PatientController patientController) {
         this.patientController = patientController;
-        initialize();
     }
 
-    public void initialize()
-    {
+    public void initialize() {
         // Set up the frame
         setTitle("Patient360");
         setSize(1900, 650);
@@ -36,85 +35,84 @@ public class LoginFrame extends JFrame
         // Create the main panel with BorderLayout
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
-        
+
         // Set the main panel's background color to white
         mainPanel.setBackground(Color.WHITE);
 
         // Create a new panel just for the centered components
         JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridBagLayout());  // Use GridBagLayout to center components
-        centerPanel.setBackground(Color.WHITE);  // Set the background of this panel to white
-        
+        centerPanel.setLayout(new GridBagLayout());
+        centerPanel.setBackground(Color.WHITE);
+
         // Load the image icon
         ImageIcon image1 = new ImageIcon("src/ui/imgs/Patient360Logo.png");
         ImageIcon image2 = new ImageIcon("src/ui/imgs/profilepic.png");
 
-        // Resize the image (example: make it smaller, 200x100 px)
+        // Resize the images
         Image scaledImage = image1.getImage().getScaledInstance(200, 100, Image.SCALE_SMOOTH);
-        image1 = new ImageIcon(scaledImage);  // Set the resized image back to ImageIcon
-        JLabel imageLabel = new JLabel(image1);  // Add the image icon to a JLabel
+        image1 = new ImageIcon(scaledImage);
+        JLabel imageLabel = new JLabel(image1);
         imageLabel.setBounds(0, 0, image1.getIconWidth(), image1.getIconHeight());
 
         Image scaledImage2 = image2.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-        image2 = new ImageIcon(scaledImage2);  // Set the resized image back to ImageIcon
-        JLabel imageLabel2 = new JLabel(image2);  // Add the image icon to a JLabel
+        image2 = new ImageIcon(scaledImage2);
+        JLabel imageLabel2 = new JLabel(image2);
 
-        // Create GridBagConstraints to center the components
+        // GridBagConstraints for layout
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0; // Centering on the X axis (0 is the first column)
-        gbc.gridy = 0; // Start from the top
-        gbc.insets = new Insets(10, 10, 10, 10); // Add padding around components
-        gbc.gridwidth = 2; // Make the profile image span two columns (center horizontally)
-        gbc.anchor = GridBagConstraints.CENTER; // Align the image in the center
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
 
-        // Add the profile image above the username label in the centerPanel
-        centerPanel.add(imageLabel2, gbc);  // Add profile image at the top of centerPanel
+        centerPanel.add(imageLabel2, gbc);
 
-        // Add components to centerPanel using GridBagLayout
-        gbc.gridy++;  // Move to the next row (for the username label)
-        gbc.gridwidth = 1; // Reset gridwidth to 1 for subsequent components
+        gbc.gridy++;
+        gbc.gridwidth = 1;
         centerPanel.add(usernameLabel, gbc);
-        gbc.gridx++;  // Move to the next column
+        gbc.gridx++;
         centerPanel.add(textbox, gbc);
 
-        gbc.gridy++;  // Move to the next row (for the password label)
-        gbc.gridx = 0; // Reset to the first column
+        gbc.gridy++;
+        gbc.gridx = 0;
         centerPanel.add(passwordLabel, gbc);
-        gbc.gridx++;  // Move to the next column
+        gbc.gridx++;
         centerPanel.add(textbox2, gbc);
 
-        gbc.gridy++;  // Move to the next row (for the verify button)
+        gbc.gridy++;
         centerPanel.add(usernameVerifyButton, gbc);
 
-        // Add the large logo image at the top using BorderLayout.NORTH
-        mainPanel.add(imageLabel);
-
-        // Add the centerPanel to the center of the mainPanel
+        mainPanel.add(imageLabel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
-        // Add the mainPanel to the frame's content pane
         getContentPane().add(mainPanel);
 
-        // Add an ActionListener to the "Verify" button to open the StartingScreen
+        // ActionListener to capture input
         usernameVerifyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Close the current LoginFrame
-                dispose();
+                // Capture values from input fields
+                enteredUsername = textbox.getText().trim();
+                enteredPassword = textbox2.getText().trim();
 
-                // Open the StartingScreen
-                new StartingScreen(patientController);  // Open the StartingScreen
+                // Debugging: Print captured values to the console
+                System.out.println("Entered Username: " + enteredUsername);
+                System.out.println("Entered Password: " + enteredPassword);
+
+                // Validation
+                if (enteredUsername.equals(username) && enteredPassword.equals(password)) {
+                    JOptionPane.showMessageDialog(null, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                    new StartingScreen(patientController);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
+                    textbox.setText(""); // Clear username field
+                    textbox2.setText(""); // Clear password field
+                }
             }
         });
-        // Set the window to be visible
+
         setVisible(true);
     }
-    /* 
-    // The main method needs to be static to be an entry point
-    public static void main(String[] args)
-    {
-        LoginFrame myFrame = new LoginFrame();
-        myFrame.initialize();
-    }
-        */
 }
