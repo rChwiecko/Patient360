@@ -16,7 +16,8 @@ public class LoginFrame extends JFrame
     private static JLabel passwordLabel = new JLabel("Password:");
     private static JTextField textbox2 = new JTextField(15);
     private static JButton usernameVerifyButton = new JButton("Verify");
-    
+    private String password = "CS3307";
+    private String username = "Recep1";
     // Declare patientController as a class field
     private PatientController patientController;
 

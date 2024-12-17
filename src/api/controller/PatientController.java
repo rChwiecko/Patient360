@@ -18,11 +18,11 @@ public class PatientController{
     }
 
     public List<Patient> getPatients(){
-        return this.patients;
+        return this.hospital.getPatients();
     }
 
     public List<Doctor> getDoctors(){
-        return this.doctors;
+        return this.hospital.getDoctors();
     }
 
     public Hospital getHospital(){

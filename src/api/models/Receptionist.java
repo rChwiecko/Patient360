@@ -162,7 +162,7 @@ public class Receptionist extends Person implements HospitalMember{
     }
 //String firstName, String lastName, String email, String phoneNum, String ID, String medicalRecordNum, Doctor doctor, String medicalRecord
     public void addPatient(String firstName, String lastName, String phoneNumber, String email, Doctor doctor) throws PatientManagementException{
-        Patient newPaitient = new Patient(firstName, lastName, email, phoneNumber, "12", "3", doctor, "");
+        Patient newPaitient = new Patient(firstName, lastName, email, phoneNumber, "12", "3", doctor, null);
         //check to see if patient is already a member of the hospital
         for (Patient patient: this.getLocation().getPatients()){
             if (patient.getFirstName().equals(newPaitient.getFirstName()) && patient.getLastName().equals(newPaitient.getLastName())){
