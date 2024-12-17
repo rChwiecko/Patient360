@@ -1,33 +1,24 @@
 package api.models;
 
-
-import java.time.LocalDateTime;
 import java.time.Duration;
+import java.time.LocalDateTime;
 
-public abstract class AppointmentFactory {
-    public abstract Appointment createAppointment(Patient patient, Doctor doctor, String description, LocalDateTime date, Hospital location, String preAppointmentInstructions, Duration appointmentDuration);
-}
+public class AppointmentFactory {
 
-// Factory class for GeneralConsultation
-class GeneralConsultationFactory extends AppointmentFactory {
-    @Override
-    public Appointment createAppointment(Patient patient, Doctor doctor, String description, LocalDateTime date, Hospital location, String preAppointmentInstructions, Duration appointmentDuration) {
-        return new GeneralConsultation(patient, doctor, description, date, location, preAppointmentInstructions, appointmentDuration);
-    }
-}
+    public static Appointment createAppointment(String appointmentType, 
+                                                Patient patient, 
+                                                Doctor doctor, 
+                                                String description, 
+                                                LocalDateTime date, 
+                                                Hospital location, 
+                                                String preAppointmentInstructions, 
+                                                Duration appointmentDuration) {
 
-// Factory class for FollowUp
-class FollowUpFactory extends AppointmentFactory {
-    @Override
-    public Appointment createAppointment(Patient patient, Doctor doctor, String description, LocalDateTime date, Hospital location, String preAppointmentInstructions, Duration appointmentDuration) {
-        return new FollowUp(patient, doctor, description, date, location, preAppointmentInstructions, appointmentDuration);
-    }
-}
-
-// Factory class for Surgery
-class SurgeryFactory extends AppointmentFactory {
-    @Override
-    public Appointment createAppointment(Patient patient, Doctor doctor, String description, LocalDateTime date, Hospital location, String preAppointmentInstructions, Duration appointmentDuration) {
-        return new Surgery(patient, doctor, description, date, location, preAppointmentInstructions, appointmentDuration);
+        return switch (appointmentType.toLowerCase()) {
+            case "general" -> new GeneralConsultation(patient, doctor, description, date, location, preAppointmentInstructions, appointmentDuration);
+            case "follow" -> new FollowUp(patient, doctor, description, date, location, preAppointmentInstructions, appointmentDuration);
+            case "surgery" -> new Surgery(patient, doctor, description, date, location, preAppointmentInstructions, appointmentDuration);
+            default -> throw new IllegalArgumentException("Unknown appointment type: " + appointmentType);
+        };
     }
 }

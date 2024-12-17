@@ -14,12 +14,17 @@ public class BookAppointmentScreen extends JFrame {
     private JLabel username;
 
     private final PatientController patientController;
-    private final JPanel availabilityPanel;
+    private JPanel availabilityPanel;
     private Patient selectedPatient;
 
     public BookAppointmentScreen(PatientController patientController) {
         this.patientController = patientController;
         Patient currPatient = selectPatient();
+        if (currPatient == null){
+            dispose();
+            new StartingScreen(patientController);
+            return;
+        }
         setTitle("Book an Appointment");
         setSize(1900, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,7 +43,12 @@ public class BookAppointmentScreen extends JFrame {
         availabilityPanel = new JPanel();
         availabilityPanel.setBackground(Color.WHITE);
 
-        buildAvailabilityTable(currPatient);
+        boolean res = buildAvailabilityTable(currPatient);
+        if (!res){
+            dispose();
+            new StartingScreen(patientController);
+            return;
+        }
 
         JScrollPane scrollPane = new JScrollPane(availabilityPanel, 
             JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -63,98 +73,111 @@ public class BookAppointmentScreen extends JFrame {
         setVisible(true);
     }
 
-    private void buildAvailabilityTable(Patient SelectedPatient) {
+    private boolean buildAvailabilityTable(Patient selectedPatient) {
         // Prompt user for date selection via a dialog
         JPanel datePanel = new JPanel(new FlowLayout());
-        int currentYear = LocalDate.now().getYear();
-
+        LocalDate today = LocalDate.now(); // Get today's date
+        int currentYear = today.getYear();
+        int currentMonth = today.getMonthValue();
+        int currentDay = today.getDayOfMonth();
+    
         JComboBox<Integer> yearCombo = new JComboBox<>(new Integer[]{currentYear, currentYear + 1});
-        JComboBox<Integer> monthCombo = new JComboBox<>(new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12});
-        JComboBox<Integer> dayCombo = new JComboBox<>(generateDays(1,31)); // simple 1-31; no validation
-
+        yearCombo.setSelectedItem(currentYear); // Default to current year
+    
+        JComboBox<Integer> monthCombo = new JComboBox<>(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
+        monthCombo.setSelectedItem(currentMonth); // Default to current month
+    
+        JComboBox<Integer> dayCombo = new JComboBox<>(generateDays(1, 31));
+        dayCombo.setSelectedItem(currentDay); // Default to current day
+    
         datePanel.add(new JLabel("Year:"));
         datePanel.add(yearCombo);
         datePanel.add(new JLabel("Month:"));
         datePanel.add(monthCombo);
         datePanel.add(new JLabel("Day:"));
         datePanel.add(dayCombo);
-
+    
         int result = JOptionPane.showConfirmDialog(
-                this, 
-                datePanel, 
-                "Select a Date", 
-                JOptionPane.OK_CANCEL_OPTION, 
+                this,
+                datePanel,
+                "Select a Date",
+                JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE
         );
-
+    
         if (result != JOptionPane.OK_OPTION) {
             // If user canceled, just return (no table built)
-            return;
-        }
 
+            return false;
+        }
+    
         int year = (int) yearCombo.getSelectedItem();
         int month = (int) monthCombo.getSelectedItem();
         int day = (int) dayCombo.getSelectedItem();
-
+    
+        // Construct the selected date
         LocalDate selectedDate = LocalDate.of(year, month, day);
-
+    
         List<Doctor> doctors = patientController.getDoctors();
-
+    
         // Define the time slots
-        // Use the selected date instead of 'now'
-        LocalDateTime startTime = LocalDateTime.of(selectedDate, LocalTime.of(9, 0));
+        LocalTime startTime = LocalTime.of(9, 0); // Start at 9:00 AM
         int slots = 15;
         Duration slotDuration = Duration.ofMinutes(30);
-
+    
         // Total columns: 1 for doctor's name + 15 for time slots
         int cols = 1 + slots;
         // Rows: 1 for time labels + 1 per doctor
         int rows = 1 + doctors.size();
-
+    
         availabilityPanel.removeAll(); // Clear if previously built
         availabilityPanel.setLayout(new GridLayout(rows, cols, 5, 5));
-
+    
         // First row (time labels)
         availabilityPanel.add(new JLabel("")); // top-left corner blank cell
         for (int i = 0; i < slots; i++) {
-            LocalDateTime slotTime = startTime.plus(slotDuration.multipliedBy(i));
+            LocalTime slotTime = startTime.plus(slotDuration.multipliedBy(i));
             String timeStr = String.format("%02d:%02d", slotTime.getHour(), slotTime.getMinute());
             JLabel timeLabel = new JLabel(timeStr, SwingConstants.CENTER);
             timeLabel.setFont(new Font("Arial", Font.BOLD, 12));
             availabilityPanel.add(timeLabel);
         }
-
+    
         // Each subsequent row: one doctor
         for (Doctor doc : doctors) {
             JLabel docLabel = new JLabel(doc.getFirstName(), SwingConstants.CENTER);
             docLabel.setFont(new Font("Arial", Font.PLAIN, 14));
             availabilityPanel.add(docLabel);
-
+    
             for (int i = 0; i < slots; i++) {
-                LocalDateTime slotTime = startTime.plus(slotDuration.multipliedBy(i));
-                boolean available = doc.isAvailable(slotTime, slotDuration);
-
+                LocalTime slotTime = startTime.plus(slotDuration.multipliedBy(i));
+                LocalDateTime fullDateTime = LocalDateTime.of(selectedDate, slotTime); // Combine date and time
+    
+                boolean available = doc.isAvailable(fullDateTime, slotDuration);
+    
                 JButton button = new JButton();
                 button.setBackground(available ? Color.BLUE : Color.GRAY);
                 button.setEnabled(available);
-                button.setToolTipText(timeString(slotTime) + " - " + (available ? "Available" : "Unavailable"));
-
+                button.setToolTipText(timeString(fullDateTime) + " - " + (available ? "Available" : "Unavailable"));
+    
                 if (available) {
-                    String selectedTime = timeString(slotTime);
+                    String selectedTime = timeString(fullDateTime);
                     Doctor doctorName = doc;
                     button.addActionListener(e -> {
-                        new AppointmentDetailsScreen(doctorName, selectedTime, patientController, SelectedPatient);
+                        new AppointmentDetailsScreen(doctorName, fullDateTime, patientController, selectedPatient);
                     });
                 }
-
+    
                 availabilityPanel.add(button);
             }
         }
-
+    
         availabilityPanel.revalidate();
         availabilityPanel.repaint();
+        return true;
     }
-
+    
+    
     private Integer[] generateDays(int start, int end) {
         Integer[] days = new Integer[end - start + 1];
         for (int i = 0; i < days.length; i++) {
@@ -171,69 +194,92 @@ public class BookAppointmentScreen extends JFrame {
     // Separate class for the new full window with details and a description field
     private class AppointmentDetailsScreen extends JFrame {
         private JTextArea descriptionTextArea;
+        private JTextArea preAppointmentTextArea;
         private JComboBox<String> appointmentTypeCombo;
-
-        public AppointmentDetailsScreen(Doctor doctorName, String selectedTime, PatientController pc, Patient selectedPatient) {
+    
+        public AppointmentDetailsScreen(Doctor doctorName, LocalDateTime selectedTime, PatientController pc, Patient selectedPatient) {
             setTitle("Appointment Details");
-            setSize(600, 500); // Increased height to accommodate new components
+            setSize(600, 600); // Increased height to accommodate new components
             setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             setLocationRelativeTo(null); // Center the window
-
+    
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
             panel.setBackground(Color.WHITE);
-
+    
             JLabel infoLabel = new JLabel("Doctor: " + doctorName.getLastName() + " | Time Slot: " + selectedTime);
             infoLabel.setFont(new Font("Arial", Font.PLAIN, 18));
             infoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
+    
             panel.add(Box.createVerticalStrut(30));
             panel.add(infoLabel);
             panel.add(Box.createVerticalStrut(20));
-
+    
             // Add a label for the appointment type
             JLabel typeLabel = new JLabel("Appointment Type:");
             typeLabel.setFont(new Font("Arial", Font.PLAIN, 14));
             typeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             panel.add(typeLabel);
             panel.add(Box.createVerticalStrut(10));
-
+    
             // Add a combo box for the appointment type
-            appointmentTypeCombo = new JComboBox<>(new String[] {
-                "General Consultation", 
-                "Surgery", 
+            appointmentTypeCombo = new JComboBox<>(new String[]{
+                "General Consultation",
+                "Surgery",
                 "Follow Up"
             });
             appointmentTypeCombo.setAlignmentX(Component.CENTER_ALIGNMENT);
             panel.add(appointmentTypeCombo);
             panel.add(Box.createVerticalStrut(20));
-
+    
             // Add a label for the description
             JLabel descLabel = new JLabel("Appointment Description:");
             descLabel.setFont(new Font("Arial", Font.PLAIN, 14));
             descLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             panel.add(descLabel);
             panel.add(Box.createVerticalStrut(10));
-
+    
             // Add the text area for appointment description
             descriptionTextArea = new JTextArea(5, 30);
             descriptionTextArea.setWrapStyleWord(true);
             descriptionTextArea.setLineWrap(true);
             descriptionTextArea.setFont(new Font("Arial", Font.PLAIN, 14));
-
+    
             JScrollPane descScrollPane = new JScrollPane(descriptionTextArea,
                     JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                     JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             descScrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
-
+    
             panel.add(descScrollPane);
             panel.add(Box.createVerticalStrut(20));
-
+    
+            // Add a label for pre-appointment instructions
+            JLabel preAppLabel = new JLabel("Pre-Appointment Instructions:");
+            preAppLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            preAppLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            panel.add(preAppLabel);
+            panel.add(Box.createVerticalStrut(10));
+    
+            // Add the text area for pre-appointment instructions
+            preAppointmentTextArea = new JTextArea(5, 30);
+            preAppointmentTextArea.setWrapStyleWord(true);
+            preAppointmentTextArea.setLineWrap(true);
+            preAppointmentTextArea.setFont(new Font("Arial", Font.PLAIN, 14));
+    
+            JScrollPane preAppScrollPane = new JScrollPane(preAppointmentTextArea,
+                    JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                    JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            preAppScrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+    
+            panel.add(preAppScrollPane);
+            panel.add(Box.createVerticalStrut(20));
+    
             // Confirm and cancel buttons
             JButton confirmButton = new JButton("Confirm Appointment");
             confirmButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             confirmButton.addActionListener(e -> {
                 String description = descriptionTextArea.getText().trim();
+                String preInstructions = preAppointmentTextArea.getText().trim();
                 // Determine the appointment type code based on the user's selection
                 String selectedTypeText = (String) appointmentTypeCombo.getSelectedItem();
                 String appointmentType;
@@ -244,20 +290,20 @@ public class BookAppointmentScreen extends JFrame {
                 } else {
                     appointmentType = "follow";
                 }
-
+    
                 LocalDateTime currentDateTime = LocalDateTime.now();
                 Duration thirtyMinutes = Duration.ofMinutes(30);
                 boolean bookingRes = patientController.bookAppointment(
-                    selectedPatient, 
-                    doctorName, 
-                    appointmentType, 
-                    description, 
-                    currentDateTime, 
-                    patientController.getHospital(), 
-                    thirtyMinutes, 
-                    description
+                    selectedPatient,
+                    doctorName,
+                    appointmentType,
+                    description,
+                    selectedTime,
+                    patientController.getHospital(),
+                    thirtyMinutes,
+                    preInstructions // Pass the pre-appointment instructions
                 );
-
+    
                 if (bookingRes) {
                     JOptionPane.showMessageDialog(this, "Appointment Confirmed!\nDescription: " + description);
                 } else {
@@ -265,21 +311,23 @@ public class BookAppointmentScreen extends JFrame {
                 }
                 dispose();
             });
-
+    
             JButton cancelButton = new JButton("Cancel");
             cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             cancelButton.addActionListener(e -> {
                 dispose();
+                new StartingScreen(patientController);
             });
-
+    
             panel.add(confirmButton);
             panel.add(Box.createVerticalStrut(10));
             panel.add(cancelButton);
-
+    
             getContentPane().add(panel);
             setVisible(true);
         }
     }
+    
 
 
     private Patient selectPatient() {
@@ -324,9 +372,9 @@ public class BookAppointmentScreen extends JFrame {
                 return selectedPatient;
                 // selectedPatient now holds the chosen patient's object
             }
-        }return selectPatient();
+        }return null;
     }
 
 
 
-}
+} 

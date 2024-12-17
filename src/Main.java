@@ -2,6 +2,7 @@ import api.models.*;
 import api.models.exceptions.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import ui.UiMain; // 
 
 public class Main {
@@ -37,16 +38,17 @@ public class Main {
         }
 
         // Creation of patient objects
-        Patient p1 = new Patient("Ryan","Chwiecko","rchwiec@uwo.ca", "123-456-7891","P2345","",doctor2,"");
-        Patient p2 = new Patient("Sonia","Sharma","sshar@uwo.ca", "987-654-3211","P23456","",doctor3,"");
-        Patient p3 = new Patient("Mark", "Taylor", "marktaylor@example.com", "234-567-8910", "P3333", "", doctor1, "");
-        Patient p4 = new Patient("Lisa", "Chen", "lisachen@example.com", "345-678-9012", "P4444", "", doctor5, "");
-        Patient p5 = new Patient("Sam", "Williams", "swilliams@example.com", "456-789-0123", "P5555", "", doctor6, "");
-        Patient p6 = new Patient("Dana", "Lee", "danalee@example.com", "567-890-1234", "P6666", "", doctor4, "");
-        Patient p7 = new Patient("Ahmed", "Hussein", "ahussein@example.com", "678-901-2345", "P7777", "", doctor7, "");
-        Patient p8 = new Patient("Nina", "Rodriguez", "ninarod@example.com", "789-012-3456", "P8888", "", doctor2, "");
-        Patient p9 = new Patient("Oliver", "Smith", "oliversmith@example.com", "890-123-4567", "P9999", "", doctor3, "");
-        Patient p10 = new Patient("Bella", "Clark", "bellaclark@example.com", "901-234-5678", "P1010", "", doctor1, "");
+        Patient p1 = new Patient("Ryan","Chwiecko","rchwiec@uwo.ca", "123-456-7891","P2345","",doctor2,new ArrayList<>());
+        Patient p2 = new Patient("Sonia", "Sharma", "sshar@uwo.ca", "987-654-3211", "P23456", "", doctor3, new ArrayList<>());
+        Patient p3 = new Patient("Mark", "Taylor", "marktaylor@example.com", "234-567-8910", "P3333", "", doctor1, new ArrayList<>());
+        Patient p4 = new Patient("Lisa", "Chen", "lisachen@example.com", "345-678-9012", "P4444", "", doctor5, new ArrayList<>());
+        Patient p5 = new Patient("Sam", "Williams", "swilliams@example.com", "456-789-0123", "P5555", "", doctor6, new ArrayList<>());
+        Patient p6 = new Patient("Dana", "Lee", "danalee@example.com", "567-890-1234", "P6666", "", doctor4, new ArrayList<>());
+        Patient p7 = new Patient("Ahmed", "Hussein", "ahussein@example.com", "678-901-2345", "P7777", "", doctor7, new ArrayList<>());
+        Patient p8 = new Patient("Nina", "Rodriguez", "ninarod@example.com", "789-012-3456", "P8888", "", doctor2, new ArrayList<>());
+        Patient p9 = new Patient("Oliver", "Smith", "oliversmith@example.com", "890-123-4567", "P9999", "", doctor3, new ArrayList<>());
+        Patient p10 = new Patient("Bella", "Clark", "bellaclark@example.com", "901-234-5678", "P1010", "", doctor1, new ArrayList<>());
+
 
         // Add patients to the hospital (catching exceptions for duplicates)
         try {

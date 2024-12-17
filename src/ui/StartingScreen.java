@@ -1,13 +1,10 @@
 package ui;
 
 import api.controller.PatientController;
-
-import ui.LoginFrame;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class StartingScreen extends JFrame {
     private PatientController patientController;
@@ -32,7 +29,7 @@ public class StartingScreen extends JFrame {
         logoPanel.setBackground(Color.WHITE);  // Set background to white for consistency
 
         // Load and scale the logo image
-        ImageIcon image1 = new ImageIcon("src/ui/imgs/Patient360Logo.png");
+        ImageIcon image1 = new ImageIcon(getClass().getResource("/ui/imgs/Patient360Logo.png"));
         Image scaledImage = image1.getImage().getScaledInstance(200, 100, Image.SCALE_SMOOTH);
         image1 = new ImageIcon(scaledImage);  // Set the resized image back to ImageIcon
         JLabel imageLabel = new JLabel(image1);  // Add the image icon to a JLabel
@@ -44,7 +41,7 @@ public class StartingScreen extends JFrame {
         logoPanel.add(imageLabel);  // Position logo at top-left of the logo panel
 
         // Create a welcome label
-        JLabel welcomeLabel = new JLabel("<html>Welcome, Name <br>Where would you like to start?</html>", SwingConstants.CENTER);
+        JLabel welcomeLabel = new JLabel("<html>Welcome, </html>"+patientController.getReceptionist().getFirstName()+"<html><br>Where would you like to start?</html>", SwingConstants.CENTER);
         welcomeLabel.setFont(new Font("Arial", Font.PLAIN, 15));  // Increased font size for better visibility
         welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  // Center the text horizontally
 

@@ -11,11 +11,11 @@ public class Patient extends Person implements HospitalMember{
     private List<Prescription> currentMedications;
     private List<Appointment> appointments;
     private Doctor doctor;
-    private String medicalRecord;
+    private List<String> medicalRecord;
     private boolean checkIn;
     private List<Observer> observers = new ArrayList<>();
     // Constructor
-    public Patient(String firstName, String lastName, String email, String phoneNum, String ID, String medicalRecordNum, Doctor doctor, String medicalRecord) {
+    public Patient(String firstName, String lastName, String email, String phoneNum, String ID, String medicalRecordNum, Doctor doctor, List<String> medicalRecord) {
         super(firstName, lastName, email, phoneNum, ID);
         this.medicalRecordNum = medicalRecordNum;
         this.currentMedications = new ArrayList<>();
@@ -90,8 +90,8 @@ public class Patient extends Person implements HospitalMember{
      *
      * @return the patient's medical record
      */
-    public String getMedicalRecord() {
-        return medicalRecord;
+    public List<String> getMedicalRecord() {
+        return this.medicalRecord;
     }
 
     /**
@@ -109,7 +109,7 @@ public class Patient extends Person implements HospitalMember{
      * @param additional additional information to append to the medical record
      */
     public void updateMedicalRecord(String additional) {
-        this.medicalRecord += additional;
+        this.medicalRecord.add(additional);
     }
 
     /**
