@@ -1,6 +1,6 @@
 package api.models;
 
-
+import api.models.Observer.NotificationService;
 import api.models.composite.*;
 import api.models.exceptions.*;
 import java.time.Duration;
@@ -143,8 +143,10 @@ public class Receptionist extends Person implements HospitalMember{
         if (doctor.isAvailable(date, appointmentDuration)){
             Appointment appointment = AppointmentFactory.createAppointment(appointmentType, patient, doctor, description, date, location, preAppointmentInstructions, appointmentDuration);
             // Book and schedule the appointment
-            patient.bookAppointment(appointment);
             doctor.scheduleAppointment(appointment);
+            patient.addObserver(new NotificationService());
+            patient.bookAppointment(appointment);
+            
             return true;
         }
         else{

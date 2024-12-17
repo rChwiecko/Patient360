@@ -145,7 +145,7 @@ public class BookAppointmentScreen extends JFrame {
     
         // Each subsequent row: one doctor
         for (Doctor doc : doctors) {
-            JLabel docLabel = new JLabel(doc.getFirstName(), SwingConstants.CENTER);
+            JLabel docLabel = new JLabel(doc.getFirstName().substring(0, 1) + ". "+doc.getLastName(), SwingConstants.CENTER);
             docLabel.setFont(new Font("Arial", Font.PLAIN, 14));
             availabilityPanel.add(docLabel);
     

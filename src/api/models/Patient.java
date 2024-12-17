@@ -37,6 +37,8 @@ public class Patient extends Person implements HospitalMember{
      */
     public void bookAppointment(Appointment appointment) {
         this.appointments.add(appointment);
+        notifyObservers("A new appointment has been booked for: " + appointment.getDate() +
+                    " with Dr. " + appointment.getDoctor().getLastName());
     }
 
     /**
