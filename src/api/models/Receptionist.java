@@ -141,16 +141,7 @@ public class Receptionist extends Person implements HospitalMember{
      */
     public boolean makeAppointment(Patient patient, Doctor doctor, String appointmentType, String description, LocalDateTime date, Hospital location, Duration appointmentDuration, String preAppointmentInstructions){
         if (doctor.isAvailable(date, appointmentDuration)){
-            AppointmentFactory factory;
-            switch (appointmentType.toLowerCase()) {
-                //utilization of factor method
-                case "general" -> factory = new GeneralConsultationFactory();
-                case "follow" -> factory = new FollowUpFactory();
-                case "surgery" -> factory = new SurgeryFactory();
-                default -> throw new IllegalArgumentException("Unknown appointment type: " + appointmentType);
-            }
-            Appointment appointment = factory.createAppointment(patient, doctor, description, date, location, preAppointmentInstructions, appointmentDuration);
-
+            Appointment appointment = AppointmentFactory.createAppointment(appointmentType, patient, doctor, description, date, location, preAppointmentInstructions, appointmentDuration);
             // Book and schedule the appointment
             patient.bookAppointment(appointment);
             doctor.scheduleAppointment(appointment);
@@ -160,7 +151,14 @@ public class Receptionist extends Person implements HospitalMember{
             return false;
         }
     }
-//String firstName, String lastName, String email, String phoneNum, String ID, String medicalRecordNum, Doctor doctor, String medicalRecord
+    /**
+     * @param firstName
+     * @param lastName
+     * @param phoneNumber
+     * @param email
+     * @param doctor
+     * @throws PatientManagementException
+     */
     public void addPatient(String firstName, String lastName, String phoneNumber, String email, Doctor doctor) throws PatientManagementException{
         Patient newPaitient = new Patient(firstName, lastName, email, phoneNumber, "12", "3", doctor, null);
         //check to see if patient is already a member of the hospital
