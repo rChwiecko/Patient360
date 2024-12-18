@@ -6,97 +6,89 @@ import api.models.Patient;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class CheckOutPatientScreen extends JFrame {
-    private JLabel username;
-
+    private static DefaultListModel<String> appointmentModel = new DefaultListModel<>();
     private static final int SCREEN_WIDTH = 1900;
     private static final int SCREEN_HEIGHT = 650;
 
     private PatientController patientController;
+    private Map<String, Appointment> appointmentMap = new HashMap<>();
 
     public CheckOutPatientScreen(PatientController patientController) {
         this.patientController = patientController;
 
-        setTitle("Check-out Patient");
-        setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-
-        JLabel titleLabel = new JLabel("Select Appointment to Check-Out");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        mainPanel.add(titleLabel);
-
-        // List Panel
-        JPanel listPanel = new JPanel();
-        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
-
-        // Fetch all appointments with "Ongoing" status
+        // Get list of ongoing appointments and populate the model and map
         List<Appointment> ongoingAppointments = patientController.getPatients().stream()
                 .flatMap(patient -> patient.getAppointments().stream())
                 .filter(appointment -> "Ongoing".equals(appointment.getAppointmentStatus()))
                 .collect(Collectors.toList());
 
-        DefaultListModel<String> appointmentListModel = new DefaultListModel<>();
-        for (Appointment appointment : ongoingAppointments) {
-            String displayText = "Patient: " + appointment.getPatient().getFirstName() + " " +
-                    appointment.getPatient().getLastName() + " | Date: " + appointment.getDate() +
-                    " | Type: " + appointment.getAppointmentType();
-            appointmentListModel.addElement(displayText);
+        if (ongoingAppointments.isEmpty()) {
+            // If no ongoing appointments, show a message and return to the starting screen
+            JOptionPane.showMessageDialog(this, "No ongoing appointments available.");
+            dispose();
+            new StartingScreen(patientController).setVisible(true); // Ensure the starting screen is visible
+        } else {
+            // Otherwise, populate the list and show the dialog
+            appointmentModel.clear();
+            for (Appointment appointment : ongoingAppointments) {
+                String appointmentDetails = "Patient: " + appointment.getPatient().getFirstName() + " " +
+                        appointment.getPatient().getLastName() + " | Date: " + appointment.getDate() +
+                        " | Type: " + appointment.getAppointmentType();
+                appointmentModel.addElement(appointmentDetails);
+                appointmentMap.put(appointmentDetails, appointment);
+            }
+
+            showAppointmentListDialog();
+        }
+    }
+
+    private void showAppointmentListDialog() {
+        JList<String> appointmentList = new JList<>(appointmentModel);
+        appointmentList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        appointmentList.setFont(new Font("Arial", Font.PLAIN, 16));
+
+        int option = JOptionPane.showConfirmDialog(
+                this,
+                new JScrollPane(appointmentList),
+                "Select an Ongoing Appointment to Check-Out",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (option == JOptionPane.CANCEL_OPTION) {
+            // If the user clicks "Cancel", dispose of the current frame and return to the previous screen.
+            dispose();
+            new StartingScreen(patientController).setVisible(true);  // Ensure it's made visible
+            return;
         }
 
-        JList<String> appointmentList = new JList<>(appointmentListModel);
-        appointmentList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane scrollPane = new JScrollPane(appointmentList);
+        String selectedAppointmentDetails = appointmentList.getSelectedValue();
+        if (selectedAppointmentDetails != null) {
+            Appointment selectedAppointment = appointmentMap.get(selectedAppointmentDetails);
+            if (selectedAppointment != null) {
+                // Show confirmation to mark the appointment as completed
+                int confirm = JOptionPane.showConfirmDialog(
+                        this,
+                        "Confirm check-out for appointment:\n" + selectedAppointmentDetails,
+                        "Confirm Appointment Check-Out",
+                        JOptionPane.YES_NO_OPTION
+                );
 
-        JButton completeButton = new JButton("Mark as Completed");
-        completeButton.setEnabled(false);
-
-        // Enable button only if an appointment is selected
-        appointmentList.addListSelectionListener(e -> completeButton.setEnabled(appointmentList.getSelectedIndex() != -1));
-
-        // Action to mark appointment as completed
-        completeButton.addActionListener(e -> {
-            int selectedIndex = appointmentList.getSelectedIndex();
-            if (selectedIndex != -1) {
-                Appointment selectedAppointment = ongoingAppointments.get(selectedIndex);
-
-                int confirmation = JOptionPane.showConfirmDialog(this,
-                        "Do you want to mark this appointment as completed?",
-                        "Confirm Completion", JOptionPane.YES_NO_OPTION);
-
-                if (confirmation == JOptionPane.YES_OPTION) {
+                if (confirm == JOptionPane.YES_OPTION) {
                     selectedAppointment.updateStatus("Completed");
-                    JOptionPane.showMessageDialog(this, "Appointment marked as completed.");
-
-                    // Refresh the list after marking as completed
-                    appointmentListModel.remove(selectedIndex);
-                    ongoingAppointments.remove(selectedIndex);
+                    JOptionPane.showMessageDialog(this,
+                            "Appointment status updated to 'Completed' for " + selectedAppointment.getPatient().getFirstName() + ".");
+                    // Dispose the current CheckOutPatientScreen and return to the StartingScreen
+                    dispose();
+                    new StartingScreen(patientController).setVisible(true);  // Return to the starting screen after confirmation
                 }
             }
-        });
-
-        listPanel.add(scrollPane);
-        listPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add spacing
-        listPanel.add(completeButton);
-        mainPanel.add(listPanel);
-
-        // Back Button to navigate to Starting Screen
-        JButton backButton = new JButton("Back");
-        backButton.addActionListener(e -> {
-            dispose();
-            new StartingScreen(patientController);
-        });
-        mainPanel.add(backButton);
-
-        add(mainPanel);
-        setVisible(true);
+        }
     }
 }
