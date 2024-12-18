@@ -3,261 +3,277 @@ package ui;
 import api.controller.PatientController;
 import api.models.Appointment;
 import api.models.Doctor;
+import api.models.Hospital;
 import api.models.Patient;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
+import java.time.Duration;
+
+
+
+
+
+import api.controller.PatientController;
+import api.models.Appointment;
+import api.models.Patient;
+import java.awt.*;
+import javax.swing.*;
 
 public class CheckInPatientScreen extends JFrame {
-    private JLabel username;
-
     private static DefaultListModel<String> patientsModel = new DefaultListModel<>();
     private static final int SCREEN_WIDTH = 1900;
     private static final int SCREEN_HEIGHT = 650;
-    // Declare patientController as a class field
-    private PatientController patientController;
 
-    // Store the patients with a mapping from patient names to Patient objects
+    private PatientController patientController;
     private Map<String, Patient> patientMap = new HashMap<>();
 
     public CheckInPatientScreen(PatientController patientController) {
         this.patientController = patientController;
 
-        // Get list of patients from the PatientController
-        List<Patient> patients = patientController.getPatients(); // Assuming the controller has this method
-
-        // Clear the previous entries and populate the list with dynamic patients
+        // Get list of patients and populate the model and map
+        List<Patient> patients = patientController.getPatients();
         patientsModel.clear();
         for (Patient patient : patients) {
-            String patientName = patient.getFirstName(); // Use first name for display
-            patientsModel.addElement(patientName);
-            patientMap.put(patientName, patient); // Store the Patient object mapped to the name
+            String fullName = patient.getFirstName() + " " + patient.getLastName();
+            patientsModel.addElement(fullName);
+            patientMap.put(fullName, patient);
         }
 
-        setTitle("Check-in Patient");
-        setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        //setTitle("Check-in Patient");
+        //setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(Color.WHITE);
+        showPatientListDialog();
+        //setVisible(true);
+    }
 
-        JLabel label = new JLabel("Patient List");
-        label.setFont(new Font("Arial", Font.PLAIN, 20));
-        label.setHorizontalAlignment(SwingConstants.CENTER);
-        mainPanel.add(label);
-
+    private void showPatientListDialog() {
         JList<String> patientList = new JList<>(patientsModel);
         patientList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         patientList.setFont(new Font("Arial", Font.PLAIN, 16));
 
-        patientList.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    String selectedPatientName = patientList.getSelectedValue();
-                    if (selectedPatientName != null) {
-                        Patient selectedPatient = patientMap.get(selectedPatientName); // Retrieve the full Patient object
-                        if (selectedPatient != null) {
-                            dispose(); // Close current screen
-                            showCheckInOptions(selectedPatient); // Pass the full Patient object
-                        }
-                    }
-                }
-            }
-        });
+        int option = JOptionPane.showConfirmDialog(
+                this,
+                new JScrollPane(patientList),
+                "Select a Patient",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
 
-        JScrollPane patientScrollPane = new JScrollPane(patientList);
-        patientScrollPane.setPreferredSize(new Dimension(300, 400));
-        mainPanel.add(patientScrollPane);
-
-        JButton backButton = new JButton("Back");
-        backButton.setPreferredSize(new Dimension(150, 50));
-        backButton.setFont(new Font("Arial", Font.PLAIN, 14));
-        backButton.addActionListener(e -> {
+        if (option == JOptionPane.CANCEL_OPTION) {
+            // If the user clicks "Cancel", dispose of the current frame and return to the previous screen.
             dispose();
-            new StartingScreen(patientController);
-        });
+            new StartingScreen(patientController).setVisible(true);  // Ensure it's made visible
+            return;
+        }
 
-        JPanel backButtonPanel = new JPanel();
-        backButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        backButtonPanel.setBackground(Color.WHITE);
-        backButtonPanel.add(backButton);
-        mainPanel.add(backButtonPanel);
-
-        getContentPane().add(mainPanel);
-        setVisible(true);
+        String selectedPatientName = patientList.getSelectedValue();
+        if (selectedPatientName != null) {
+            Patient selectedPatient = patientMap.get(selectedPatientName);
+            if (selectedPatient != null) {
+                // Show check-in options dialog
+                showCheckInOptions(selectedPatient);
+            }
+        }
     }
 
     private void showCheckInOptions(Patient patient) {
-        JFrame optionsFrame = new JFrame("Check-in Options for " + patient.getFirstName());
-        optionsFrame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        optionsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        JPanel optionsPanel = new JPanel();
-        optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));
-
-        JLabel appointmentsLabel = new JLabel("Future Appointments:");
-        appointmentsLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-        optionsPanel.add(appointmentsLabel);
-
-        // Fetch appointments dynamically from the Patient object
-        List<Appointment> appointments = patient.getAppointments(); // Assuming getAppointments returns a List<Appointment>
-
-        // Create a DefaultListModel to hold the appointment strings
-        DefaultListModel<String> appointmentListModel = new DefaultListModel<>();
-        
-        // Convert each Appointment to a string representation (using toString or custom formatting)
-        for (Appointment appointment : appointments) {
-            appointmentListModel.addElement("Description: "+appointment.getDescription()+"\nAppointment Type: "+appointment.getAppointmentType()); // Assuming Appointment has a meaningful toString() method
-        }
-
-        // Set the JList with the DefaultListModel
-        JList<String> appointmentList = new JList<>(appointmentListModel);
-        appointmentList.setFont(new Font("Arial", Font.PLAIN, 14));
-        JScrollPane appointmentScrollPane = new JScrollPane(appointmentList);
-        appointmentScrollPane.setPreferredSize(new Dimension(500, 200));
-        optionsPanel.add(appointmentScrollPane);
-
-        // Walk-in Button action
-        JButton walkInButton = new JButton("Walk-in");
-        walkInButton.addActionListener(e -> {
-            optionsFrame.dispose();
-            showWalkInForm(patient);
-        });
-
-        JButton appointmentButton = new JButton("Appointment");
-appointmentButton.addActionListener(e -> {
-    String selectedAppointmentDescription = appointmentList.getSelectedValue(); // Get the selected appointment description
-    if (selectedAppointmentDescription != null) {
-        int confirm = JOptionPane.showConfirmDialog(
-                optionsFrame,
-                "Confirm check-in for " + patient.getFirstName() + " on " + selectedAppointmentDescription + "?",
-                "Check Appointment",
-                JOptionPane.YES_NO_OPTION
+        String[] options = {"Appointment Made", "Walk-In"};
+        int choice = JOptionPane.showOptionDialog(
+                this,
+                "Select Check-In Option for " + patient.getFirstName() + " " + patient.getLastName(),
+                "Check-In Options",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                options,
+                options[0]
         );
 
-        if (confirm == JOptionPane.YES_OPTION) {
-            // Find the selected Appointment object using its description
-            Appointment selectedAppointment = patient.getAppointments().stream()
-                    .filter(appointment -> selectedAppointmentDescription.contains(appointment.getDescription()))
-                    .findFirst()
-                    .orElse(null);
+        if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
+            // If the user clicks "Cancel" or closes the dialog, dispose of the current frame and return to the previous screen.
+            dispose();
+            new StartingScreen(patientController).setVisible(true); // Ensure the screen is displayed properly.
+            return;
+        }
 
-            if (selectedAppointment != null) {
-                // Update the appointment status to "Ongoing"
-                selectedAppointment.updateStatus("Ongoing");
+        if (choice == 0) {
+            // "Appointment Made" selected
+            showAppointmentList(patient);
+        } else if (choice == 1) {
+            // "Walk-In" selected
+            showWalkInForm(patient);
+        }
+    }
 
-                JOptionPane.showMessageDialog(
-                        optionsFrame,
-                        "Appointment status for " + patient.getFirstName() + " is now 'Ongoing'."
+    private void showAppointmentList(Patient patient) {
+        List<Appointment> appointments = patient.getAppointments();
+        if (appointments == null || appointments.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No appointments found for this patient.");
+            dispose();
+            new StartingScreen(patientController).setVisible(true); // Ensure the starting screen is visible
+            return;
+        }
+        
+        DefaultListModel<String> appointmentListModel = new DefaultListModel<>();
+        Map<String, Appointment> appointmentMap = new HashMap<>();
+        for (Appointment appointment : appointments) {
+            String appointmentDetails = "Description: " + appointment.getDescription() +
+                                        " | Type: " + appointment.getAppointmentType();
+            appointmentListModel.addElement(appointmentDetails);
+            appointmentMap.put(appointmentDetails, appointment);
+        }
+        
+        JList<String> appointmentList = new JList<>(appointmentListModel);
+        appointmentList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        int option = JOptionPane.showConfirmDialog(
+                this,
+                new JScrollPane(appointmentList),
+                "Select an Appointment",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
+        
+        if (option == JOptionPane.CANCEL_OPTION) {
+            dispose();
+            new StartingScreen(patientController).setVisible(true);  // Ensure the starting screen is visible
+            return;
+        }
+        
+        if (option == JOptionPane.OK_OPTION) {
+            String selectedAppointmentDetails = appointmentList.getSelectedValue();
+            if (selectedAppointmentDetails != null) {
+                Appointment selectedAppointment = appointmentMap.get(selectedAppointmentDetails);
+                
+                // Check if the appointment is already checked in (status is "Ongoing")
+                if ("Ongoing".equals(selectedAppointment.getAppointmentStatus())) {
+                    JOptionPane.showMessageDialog(this, "This appointment has already been checked in.");
+                    dispose();
+                    new StartingScreen(patientController).setVisible(true);  // Return to the starting screen if already checked in
+                    return;
+                }
+    
+                int confirm = JOptionPane.showConfirmDialog(
+                        this,
+                        "Confirm check-in for appointment:\n" + selectedAppointmentDetails,
+                        "Confirm Appointment",
+                        JOptionPane.YES_NO_OPTION
                 );
-
-                // Dispose the options frame and refresh the Check-In screen
-                optionsFrame.dispose();
-                new CheckInPatientScreen(patientController);
-            } else {
-                JOptionPane.showMessageDialog(optionsFrame, "Failed to find the selected appointment.");
+        
+                if (confirm == JOptionPane.YES_OPTION) {
+                    selectedAppointment.updateStatus("Ongoing");
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Appointment status updated to 'Ongoing' for " + patient.getFirstName() + "."
+                    );
+        
+                    // Dispose the current CheckInPatientScreen and return to the StartingScreen
+                    dispose();
+                    new StartingScreen(patientController).setVisible(true);  // Return to the starting screen after confirmation
+                }
             }
         }
-    } else {
-        JOptionPane.showMessageDialog(optionsFrame, "Please select an appointment to check-in.");
     }
-});
-
-
-        optionsPanel.add(walkInButton);
-        optionsPanel.add(appointmentButton);
-
-        optionsFrame.add(optionsPanel);
-        optionsFrame.setVisible(true);
-    }
-
-    private void showWalkInForm(Patient patient) {
-        JFrame walkInFrame = new JFrame("Walk-in Details for " + patient.getFirstName());
-        walkInFrame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        walkInFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
+    
+    private void showWalkInForm(Patient selectedPatient) {
         JPanel walkInPanel = new JPanel();
         walkInPanel.setLayout(new BoxLayout(walkInPanel, BoxLayout.Y_AXIS));
-
-        JTextField reasonField = new JTextField();
-        reasonField.setPreferredSize(new Dimension(250, 30));
-        walkInPanel.add(new JLabel("Reason for Visit:"));
-        walkInPanel.add(reasonField);
-
-        // Fetch doctor names dynamically from the PatientController
-        List<String> doctorNames = new ArrayList<>();
-        List<Doctor> doctors = patientController.getDoctors();  // Fetch doctors from the controller
-
-        // If no doctors are available, show a fallback option
-        if (doctors != null && !doctors.isEmpty()) {
-            for (Doctor doctor : doctors) {
-                doctorNames.add(doctor.getFirstName());  // Assuming Doctor has getFullName() method
-            }
-        } else {
-            doctorNames.add("No doctors available");
+    
+        // 1. Date Panel - Show current date
+        JLabel dateLabel = new JLabel("Current Date: " + java.time.LocalDate.now());
+        walkInPanel.add(dateLabel);
+    
+        // 2. Doctor Selection Panel
+        List<Doctor> availableDoctors = patientController.getDoctors();  // Assuming you have a method to get available doctors
+        String[] doctorOptions = new String[availableDoctors.size()];
+        for (int i = 0; i < availableDoctors.size(); i++) {
+            doctorOptions[i] = availableDoctors.get(i).getFirstName();  // Assuming Doctor has a getFirstName() method
         }
+        JComboBox<String> doctorComboBox = new JComboBox<>(doctorOptions);
+        walkInPanel.add(new JLabel("Select a Doctor:"));
+        walkInPanel.add(doctorComboBox);
+        
 
-        // Create JComboBox with doctor names
-        JComboBox<String> doctorDropdown = new JComboBox<>(doctorNames.toArray(new String[0]));
-        walkInPanel.add(new JLabel("Select Doctor:"));
-        walkInPanel.add(doctorDropdown);
 
-        // Appointment type options
-        String[] appointmentTypes = {"Surgery", "Follow-up", "General Consultation"};
-        JComboBox<String> appointmentTypeDropdown = new JComboBox<>(appointmentTypes);
-        walkInPanel.add(new JLabel("Appointment Type:"));
-        walkInPanel.add(appointmentTypeDropdown);
-
-        // Location field
-        JTextField locationField = new JTextField();
-        locationField.setPreferredSize(new Dimension(250, 30));
-        walkInPanel.add(new JLabel("Location:"));
-        walkInPanel.add(locationField);
-
-        // Duration field
-        JTextField durationField = new JTextField();
-        durationField.setPreferredSize(new Dimension(250, 30));
-        walkInPanel.add(new JLabel("Duration (in minutes):"));
-        walkInPanel.add(durationField);
-
-        // Appointment date field
-        JTextField dateField = new JTextField();
-        dateField.setPreferredSize(new Dimension(250, 30));
-        walkInPanel.add(new JLabel("Appointment Date (YYYY-MM-DD):"));
-        walkInPanel.add(dateField);
-
-        // Save button action
-        JButton saveButton = new JButton("Save");
-        saveButton.addActionListener(e -> {
-            String reason = reasonField.getText();
-            String selectedDoctor = (String) doctorDropdown.getSelectedItem();
-            String appointmentType = (String) appointmentTypeDropdown.getSelectedItem();
-            String location = locationField.getText();
-            String duration = durationField.getText();
-            String appointmentDate = dateField.getText();
-
-            // Validate the input
-            if (!reason.isEmpty() && selectedDoctor != null && appointmentType != null &&
-                !location.isEmpty() && !duration.isEmpty() && !appointmentDate.isEmpty()) {
-                JOptionPane.showMessageDialog(walkInFrame, "Walk-in saved for " + patient.getFirstName() + " with Dr. " + selectedDoctor + 
-                    ": " + appointmentType + " on " + appointmentDate + ".\nLocation: " + location + "\nDuration: " + duration + " mins");
-
-                JOptionPane.showMessageDialog(walkInFrame, "Appointment status for " + patient.getFirstName() + " is now 'Ongoing'.");
-
-                walkInFrame.dispose();
-                new CheckInPatientScreen(patientController); // Assuming you're navigating back to CheckInPatientScreen
-            } else {
-                JOptionPane.showMessageDialog(walkInFrame, "Please fill all fields.");
+        // 3. Appointment Type Panel
+        String [] appointmentTypes = {"General Consultation","Surgery", "Follow-Up"};
+        JComboBox<String> appointmentTypeComboBox = new JComboBox<>(appointmentTypes);
+        walkInPanel.add(new JLabel("Select Appointment Type:"));
+        walkInPanel.add(appointmentTypeComboBox);
+    
+        // 4. Appointment Duration Panel
+        String[] durations = {"30 minutes", "1 hour"};
+        JComboBox<String> durationComboBox = new JComboBox<>(durations);
+        walkInPanel.add(new JLabel("Select Duration:"));
+        walkInPanel.add(durationComboBox);
+    
+        // 5. Appointment Description Panel
+        JTextField descriptionField = new JTextField(20);
+        walkInPanel.add(new JLabel("Description of Appointment:"));
+        walkInPanel.add(descriptionField);
+    
+        // Confirm or Cancel
+        int option = JOptionPane.showConfirmDialog(this, walkInPanel, 
+                                                    "Walk-In Appointment for " + selectedPatient.getFirstName() + " " + selectedPatient.getLastName(),
+                                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+    
+        if (option == JOptionPane.OK_OPTION) {
+            // Gather all input data
+            String selectedDoctorName = (String) doctorComboBox.getSelectedItem();
+            Doctor selectedDoctor = null;
+            for (Doctor doctor : availableDoctors) {
+                if (doctor.getFirstName().equals(selectedDoctorName)) {  // Ensure full name match
+                    selectedDoctor = doctor;
+                    break;
+                }
             }
-        });
-
-        walkInPanel.add(saveButton);
-        walkInFrame.add(walkInPanel);
-        walkInFrame.setVisible(true);
+    
+            // Handle appointment type, description, and duration
+            String selectedAppointmentType = (String) appointmentTypeComboBox.getSelectedItem();
+            String selectedDurationStr = (String) durationComboBox.getSelectedItem();
+            Duration selectedDuration = selectedDurationStr.equals("30 minutes") ? Duration.ofMinutes(30) : Duration.ofHours(1);
+            String description = descriptionField.getText();
+    
+            // Check doctor availability
+            LocalDateTime currentDateTime = LocalDateTime.now();  // Get current date and time
+            Hospital hospital = Hospital.getInstance();  // Assuming this method gets the current hospital instance
+            String preAppointmentInstructions = "";  // Set pre-appointment instructions if any, else leave it empty
+    
+            // Book the appointment
+            boolean bookingRes = patientController.bookAppointment(
+                selectedPatient,  // The patient
+                selectedDoctor,  // Doctor object (not the name)
+                selectedAppointmentType,  // Type of appointment
+                description,  // Description of the appointment
+                currentDateTime,  // Appointment time
+                hospital,  // The hospital location
+                selectedDuration,  // Appointment duration
+                preAppointmentInstructions  // Pre-appointment instructions
+            );
+    
+            // Check result and show confirmation dialog
+            if (bookingRes) {
+                JOptionPane.showMessageDialog(this, "Appointment Confirmed!\nDescription: " + description);
+                System.out.println("Booking Successful for " + selectedPatient.getFirstName());
+            } else {
+                JOptionPane.showMessageDialog(this, "Appointment Could Not Be Created!");
+                System.out.println("Booking Failed for " + selectedPatient.getFirstName());
+            }
+    
+            // Dispose of the current window and go back to the starting screen
+            dispose();
+            new StartingScreen(patientController).setVisible(true);  // Ensure that the starting screen is visible
+        } else {
+            // If canceled, return to the starting screen without making any changes
+            dispose();
+            new StartingScreen(patientController).setVisible(true);
+        }
     }
-}
+    
+}    
