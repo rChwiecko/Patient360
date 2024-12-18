@@ -15,7 +15,7 @@ public class PatientController{
      */
     public PatientController(Receptionist receptionist){
         this.receptionist = receptionist;
-        this.hospital = receptionist.getLocation();
+        this.hospital = Hospital.getInstance();
         this.doctors = hospital.getDoctors();
         this.patients = hospital.getPatients();
     }

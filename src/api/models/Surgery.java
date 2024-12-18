@@ -18,7 +18,7 @@ public class Surgery extends Appointment {
      * @param preAppointmentInstructions
      * @param appointmentDuration
      */
-    public Surgery(Patient patient, Doctor doctor, String description, LocalDateTime date, Hospital location, String preAppointmentInstructions, Duration appointmentDuration) {
-        super(patient, doctor, "Surgery", description, date, location, preAppointmentInstructions, appointmentDuration);
+    public Surgery(Patient patient, Doctor doctor, String description, LocalDateTime date, String preAppointmentInstructions, Duration appointmentDuration) {
+        super(patient, doctor, "Surgery", description, date, Hospital.getInstance(), preAppointmentInstructions, appointmentDuration);
     }
 }

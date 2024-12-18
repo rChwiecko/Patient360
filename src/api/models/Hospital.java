@@ -16,7 +16,7 @@ public class Hospital {
     private int capacity;                       // Current capacity of the hospital
     private List<Patient> patientsPresent;      // List of patients currently checked into the hospital
     private List<HospitalMember> members;       // List of all hospital members (Doctors, Patients, Receptionists)
-
+    private static Hospital instance;           //single hospital instance for singleton method
     /**
      * Constructor to initialize the Hospital with an address, department, and capacity.
      * @param address    Hospital address
@@ -30,6 +30,20 @@ public class Hospital {
         this.patientsPresent = new ArrayList<>();
         this.members = new ArrayList<>();
     }
+
+    //Enforcement of singleton design pattern
+    @SuppressWarnings("DoubleCheckedLocking")
+    public static Hospital getInstance() {
+        if (instance == null) { // Lazy initialization
+            synchronized (Hospital.class) { // Thread-safety
+                if (instance == null) {
+                    instance = new Hospital("Playground Street", "General", 10000);
+                }
+            }
+        }
+        return instance;
+    }
+
 
     /**
      * Checks if the hospital has capacity for more patients.
