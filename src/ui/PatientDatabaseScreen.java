@@ -246,6 +246,7 @@ public class PatientDatabaseScreen extends JFrame {
             if (success) {
                 JOptionPane.showMessageDialog(this, "Patient added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 dispose(); // Close the window
+                new StartingScreen(patientController);
             } else {
                 JOptionPane.showMessageDialog(this, "Failed to add patient.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -502,6 +503,8 @@ public class PatientDatabaseScreen extends JFrame {
                 addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
                 addButton.addActionListener(e -> {
                     addNewInformation(patient);
+                    dispose();
+                    new StartingScreen(patientController);
                 });
         
                 JButton closeButton = new JButton("Close");

@@ -22,14 +22,13 @@ public class AppointmentFactory {
                                                 Doctor doctor, 
                                                 String description, 
                                                 LocalDateTime date, 
-                                                Hospital location, 
                                                 String preAppointmentInstructions, 
                                                 Duration appointmentDuration) {
         //switch statement that decides what kind of appointment to create
         return switch (appointmentType.toLowerCase()) {
-            case "general" -> new GeneralConsultation(patient, doctor, description, date, location, preAppointmentInstructions, appointmentDuration);
-            case "follow" -> new FollowUp(patient, doctor, description, date, location, preAppointmentInstructions, appointmentDuration);
-            case "surgery" -> new Surgery(patient, doctor, description, date, location, preAppointmentInstructions, appointmentDuration);
+            case "general" -> new GeneralConsultation(patient, doctor, description, date, preAppointmentInstructions, appointmentDuration);
+            case "follow" -> new FollowUp(patient, doctor, description, date, preAppointmentInstructions, appointmentDuration);
+            case "surgery" -> new Surgery(patient, doctor, description, date, preAppointmentInstructions, appointmentDuration);
             default -> throw new IllegalArgumentException("Unknown appointment type: " + appointmentType);
         };
     }

@@ -29,10 +29,10 @@ public class Receptionist extends Person implements HospitalMember {
      * @param hospital   The hospital where the receptionist works
      */
     public Receptionist(String firstName, String lastName, String email, String phoneNum, String ID,
-                        String workShift, Hospital hospital) {
+                        String workShift) {
         super(firstName, lastName, email, phoneNum, ID);
         this.workShift = workShift;
-        this.recepHospital = hospital;
+        this.recepHospital = Hospital.getInstance();
         this.handledAppointments = new ArrayList<>();
     }
 
@@ -193,7 +193,7 @@ public class Receptionist extends Person implements HospitalMember {
                                    String preAppointmentInstructions) {
         if (doctor.isAvailable(date, appointmentDuration)) {
             Appointment appointment = AppointmentFactory.createAppointment(appointmentType, patient, doctor,
-                    description, date, location, preAppointmentInstructions, appointmentDuration);
+                    description, date, preAppointmentInstructions, appointmentDuration);
 
             // Schedule the appointment and notify the patient
             doctor.scheduleAppointment(appointment);

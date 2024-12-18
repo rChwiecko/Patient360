@@ -10,10 +10,10 @@ public class Main {
     
     public static void main(String[] args) {
         // Creation of hospital
-        Hospital childrensHospital = new Hospital("Playground Street", "General", 10000);
+        Hospital childrensHospital = Hospital.getInstance();
 
         // Creation of receptionist
-        recep1 = new Receptionist("Bill", "Reid", "example@gmail.com", "123-456-7891", "123", "Night", childrensHospital);
+        recep1 = new Receptionist("Bill", "Reid", "example@gmail.com", "123-456-7891", "123", "Night");
 
         // Creation of doctor objects
         Doctor doctor1 = new Doctor("John", "Doe", "johndoe@example.com", "1234567890", "D001", "Cardiology", 15, true);

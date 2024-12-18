@@ -19,7 +19,7 @@ public class GeneralConsultation extends Appointment {
      * @param preAppointmentInstructions
      * @param appointmentDuration
      */
-    public GeneralConsultation(Patient patient, Doctor doctor, String description, LocalDateTime date, Hospital location, String preAppointmentInstructions, Duration appointmentDuration) {
-        super(patient, doctor, "General Consultation", description, date, location, preAppointmentInstructions, appointmentDuration);
+    public GeneralConsultation(Patient patient, Doctor doctor, String description, LocalDateTime date, String preAppointmentInstructions, Duration appointmentDuration) {
+        super(patient, doctor, "General Consultation", description, date, Hospital.getInstance(), preAppointmentInstructions, appointmentDuration);
     }
 }

@@ -18,7 +18,7 @@ public class FollowUp extends Appointment {
      * @param preAppointmentInstructions
      * @param appointmentDuration
      */
-    public FollowUp(Patient patient, Doctor doctor, String description, LocalDateTime date, Hospital location, String preAppointmentInstructions, Duration appointmentDuration) {
-        super(patient, doctor, "Follow Up Appointment", description, date, location, preAppointmentInstructions, appointmentDuration);
+    public FollowUp(Patient patient, Doctor doctor, String description, LocalDateTime date, String preAppointmentInstructions, Duration appointmentDuration) {
+        super(patient, doctor, "Follow Up Appointment", description, date, Hospital.getInstance(), preAppointmentInstructions, appointmentDuration);
     }
 }
