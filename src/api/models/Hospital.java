@@ -31,7 +31,7 @@ public class Hospital {
         this.members = new ArrayList<>();
     }
 
-
+    //Enforcement of singleton design pattern
     @SuppressWarnings("DoubleCheckedLocking")
     public static Hospital getInstance() {
         if (instance == null) { // Lazy initialization

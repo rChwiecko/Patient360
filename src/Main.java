@@ -9,8 +9,8 @@ public class Main {
     public static Receptionist recep1;
     
     public static void main(String[] args) {
-        // Creation of hospital
-        Hospital childrensHospital = Hospital.getInstance();
+        // Creation of hospital via the singleton design pattern
+        Hospital childrensHospital = Hospital.getInstance();  
 
         // Creation of receptionist
         recep1 = new Receptionist("Bill", "Reid", "example@gmail.com", "123-456-7891", "123", "Night");
