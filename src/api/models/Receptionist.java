@@ -37,9 +37,9 @@ public class Receptionist extends Person implements HospitalMember {
     }
 
     /**
-     * Gets the role of the receptionist.
+     * Getter for the work shift of the receptionist.
      *
-     * @return "Receptionist"
+     * @return The work shift of the receptionist
      */
     @Override
     public String getRole() {
