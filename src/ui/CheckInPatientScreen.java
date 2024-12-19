@@ -14,16 +14,6 @@ import java.util.List;
 import javax.swing.*;
 import java.time.Duration;
 
-
-
-
-
-import api.controller.PatientController;
-import api.models.Appointment;
-import api.models.Patient;
-import java.awt.*;
-import javax.swing.*;
-
 public class CheckInPatientScreen extends JFrame {
     private static DefaultListModel<String> patientsModel = new DefaultListModel<>();
     private static final int SCREEN_WIDTH = 1900;
@@ -170,7 +160,7 @@ public class CheckInPatientScreen extends JFrame {
                     selectedAppointment.updateStatus("Ongoing");
                     JOptionPane.showMessageDialog(
                             this,
-                            "Appointment status updated to 'Ongoing' for " + patient.getFirstName() + "."
+                            "Appointment Confirmed! Status updated to 'Ongoing' for " + patient.getFirstName() + "."
                     );
         
                     // Dispose the current CheckInPatientScreen and return to the StartingScreen
@@ -191,6 +181,11 @@ public class CheckInPatientScreen extends JFrame {
     
         // 2. Doctor Selection Panel
         List<Doctor> availableDoctors = patientController.getDoctors();  // Assuming you have a method to get available doctors
+        if (availableDoctors.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No doctors available.");
+            return; // Exit if no doctors are available
+        }
+    
         String[] doctorOptions = new String[availableDoctors.size()];
         for (int i = 0; i < availableDoctors.size(); i++) {
             doctorOptions[i] = availableDoctors.get(i).getFirstName();  // Assuming Doctor has a getFirstName() method
@@ -198,11 +193,9 @@ public class CheckInPatientScreen extends JFrame {
         JComboBox<String> doctorComboBox = new JComboBox<>(doctorOptions);
         walkInPanel.add(new JLabel("Select a Doctor:"));
         walkInPanel.add(doctorComboBox);
-        
-
-
+    
         // 3. Appointment Type Panel
-        String [] appointmentTypes = {"General Consultation","Surgery", "Follow-Up"};
+        String[] appointmentTypes = {"General Consultation", "Surgery", "Follow-Up"};
         JComboBox<String> appointmentTypeComboBox = new JComboBox<>(appointmentTypes);
         walkInPanel.add(new JLabel("Select Appointment Type:"));
         walkInPanel.add(appointmentTypeComboBox);
@@ -226,12 +219,22 @@ public class CheckInPatientScreen extends JFrame {
         if (option == JOptionPane.OK_OPTION) {
             // Gather all input data
             String selectedDoctorName = (String) doctorComboBox.getSelectedItem();
+            if (selectedDoctorName == null || selectedDoctorName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please select a valid doctor.");
+                return;
+            }
+    
             Doctor selectedDoctor = null;
             for (Doctor doctor : availableDoctors) {
                 if (doctor.getFirstName().equals(selectedDoctorName)) {  // Ensure full name match
                     selectedDoctor = doctor;
                     break;
                 }
+            }
+    
+            if (selectedDoctor == null) {
+                JOptionPane.showMessageDialog(this, "Invalid doctor selected.");
+                return;
             }
     
             // Handle appointment type, description, and duration
@@ -270,7 +273,11 @@ public class CheckInPatientScreen extends JFrame {
     
             // Check result and show confirmation dialog
             if (bookingRes) {
-                JOptionPane.showMessageDialog(this, "Appointment Confirmed!\nDescription: " + description);
+                // After booking, immediately update the status to "Ongoing"
+                Appointment walkInAppointment = selectedPatient.getAppointments().get(selectedPatient.getAppointments().size() - 1);
+                walkInAppointment.updateStatus("Ongoing");
+    
+                JOptionPane.showMessageDialog(this, "Walk-In Confirmed! Status updated to 'Ongoing' for " + selectedPatient.getFirstName() + ".");
                 System.out.println("Booking Successful for " + selectedPatient.getFirstName());
             } else {
                 JOptionPane.showMessageDialog(this, "Appointment Could Not Be Created!");
@@ -286,5 +293,4 @@ public class CheckInPatientScreen extends JFrame {
             new StartingScreen(patientController).setVisible(true);
         }
     }
-    
 }    
