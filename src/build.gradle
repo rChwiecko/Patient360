@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+group 'com.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // JUnit 5 dependencies for testing
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    // Mockito for mocking dependencies in tests
+    testImplementation 'org.mockito:mockito-core:5.4.0'  // Updated version for better compatibility
+
+    // Optional: If you need to add JUnit 5 Platform Console for testing output (for more readable output)
+    testImplementation 'org.junit.platform:junit-platform-console:1.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
