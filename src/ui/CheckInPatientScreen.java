@@ -239,6 +239,17 @@ public class CheckInPatientScreen extends JFrame {
     
             // Handle appointment type, description, and duration
             String selectedAppointmentType = (String) appointmentTypeComboBox.getSelectedItem();
+            switch (selectedAppointmentType){
+                case "General Consultation":
+                    selectedAppointmentType = "general";
+                    break;
+                case "Surgery":
+                    selectedAppointmentType = "surgery";
+                    break;
+                case "Follow-Up":
+                    selectedAppointmentType = "follow";
+                    break;
+            }
             String selectedDurationStr = (String) durationComboBox.getSelectedItem();
             Duration selectedDuration = selectedDurationStr.equals("30 minutes") ? Duration.ofMinutes(30) : Duration.ofHours(1);
             String description = descriptionField.getText();
