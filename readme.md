@@ -98,6 +98,11 @@ To run the application, follow these steps:
 4. **Follow the prompts**:
 
    - After the application starts, follow the on-screen instructions to interact with the system.
+   - Login credentials:
+   ```bash
+   username: Recep1
+   password: CS3307
+   ```
 
 5. **Notes**:
    - Ensure the application is connected to the correct UI files (if front-end components are included).
