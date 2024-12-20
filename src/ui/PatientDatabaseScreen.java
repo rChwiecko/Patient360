@@ -475,67 +475,67 @@ public class PatientDatabaseScreen extends JFrame {
             }
         }
 
-        // Placeholder for Add Additional Information Screen
-        private class AddInformationScreen extends JFrame {
-            private JTextArea newInfoTextArea; // Text area for new information
-            private DefaultListModel<String> recordListModel; // Model for the medical record list
-            private JList<String> recordList; // List to display medical records
+        // // Placeholder for Add Additional Information Screen
+        // private class AddInformationScreen extends JFrame {
+        //     private JTextArea newInfoTextArea; // Text area for new information
+        //     private DefaultListModel<String> recordListModel; // Model for the medical record list
+        //     private JList<String> recordList; // List to display medical records
 
-            public AddInformationScreen(Patient patient) {
-                setTitle("Add Information for: " + patient.getFirstName() + " " + patient.getLastName()); // Set the
-                                                                                                          // title
-                setSize(500, 400); // Set size of the window
-                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close the window when user closes the frame
-                setLocationRelativeTo(null); // Center the window on the screen
+        //     public AddInformationScreen(Patient patient) {
+        //         setTitle("Add Information for: " + patient.getFirstName() + " " + patient.getLastName()); // Set the
+        //                                                                                                   // title
+        //         setSize(500, 400); // Set size of the window
+        //         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close the window when user closes the frame
+        //         setLocationRelativeTo(null); // Center the window on the screen
 
-                // Main panel for the form
-                JPanel mainPanel = new JPanel();
-                mainPanel.setLayout(new BorderLayout()); // Use BorderLayout for panel
-                mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Set padding for the panel
+        //         // Main panel for the form
+        //         JPanel mainPanel = new JPanel();
+        //         mainPanel.setLayout(new BorderLayout()); // Use BorderLayout for panel
+        //         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Set padding for the panel
 
-                // Title label for the medical record
-                JLabel titleLabel = new JLabel(
-                        "Medical Record for: " + patient.getFirstName() + " " + patient.getLastName());
-                titleLabel.setFont(new Font("Arial", Font.BOLD, 16)); // Set font for the title
-                titleLabel.setHorizontalAlignment(SwingConstants.CENTER); // Center align the title
-                mainPanel.add(titleLabel, BorderLayout.NORTH); // Add title label to the top of the panel
+        //         // Title label for the medical record
+        //         JLabel titleLabel = new JLabel(
+        //                 "Medical Record for: " + patient.getFirstName() + " " + patient.getLastName());
+        //         titleLabel.setFont(new Font("Arial", Font.BOLD, 16)); // Set font for the title
+        //         titleLabel.setHorizontalAlignment(SwingConstants.CENTER); // Center align the title
+        //         mainPanel.add(titleLabel, BorderLayout.NORTH); // Add title label to the top of the panel
 
-                // Text area to add new information
-                newInfoTextArea = new JTextArea(5, 20); // Create a text area for new information
-                JScrollPane scrollPane = new JScrollPane(newInfoTextArea); // Add scrolling for text area
-                mainPanel.add(scrollPane, BorderLayout.CENTER); // Add the scroll pane with text area to the center
+        //         // Text area to add new information
+        //         newInfoTextArea = new JTextArea(5, 20); // Create a text area for new information
+        //         JScrollPane scrollPane = new JScrollPane(newInfoTextArea); // Add scrolling for text area
+        //         mainPanel.add(scrollPane, BorderLayout.CENTER); // Add the scroll pane with text area to the center
 
-                // Button panel for save/cancel options
-                JPanel buttonPanel = new JPanel();
-                JButton saveButton = new JButton("Save"); // Create button to save new information
-                saveButton.addActionListener(e -> {
-                    String newInfo = newInfoTextArea.getText().trim(); // Get the text from the text area
-                    if (newInfo.isEmpty()) {
-                        JOptionPane.showMessageDialog(this, "Please enter information to save.", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        // Add new information to the patient's medical record list
-                        recordListModel.addElement(newInfo);
-                        newInfoTextArea.setText(""); // Clear the text area after saving the information
-                    }
-                });
+        //         // Button panel for save/cancel options
+        //         JPanel buttonPanel = new JPanel();
+        //         JButton saveButton = new JButton("Save"); // Create button to save new information
+        //         saveButton.addActionListener(e -> {
+        //             String newInfo = newInfoTextArea.getText().trim(); // Get the text from the text area
+        //             if (newInfo.isEmpty()) {
+        //                 JOptionPane.showMessageDialog(this, "Please enter information to save.", "Error",
+        //                         JOptionPane.ERROR_MESSAGE);
+        //             } else {
+        //                 // Add new information to the patient's medical record list
+        //                 recordListModel.addElement(newInfo);
+        //                 newInfoTextArea.setText(""); // Clear the text area after saving the information
+        //             }
+        //         });
 
-                JButton cancelButton = new JButton("Cancel"); // Create cancel button
-                cancelButton.addActionListener(e -> dispose()); // Close the window when clicked
-                buttonPanel.add(saveButton); // Add save button to the button panel
-                buttonPanel.add(cancelButton); // Add cancel button to the button panel
-                mainPanel.add(buttonPanel, BorderLayout.SOUTH); // Add button panel to the bottom of the frame
+        //         JButton cancelButton = new JButton("Cancel"); // Create cancel button
+        //         cancelButton.addActionListener(e -> dispose()); // Close the window when clicked
+        //         buttonPanel.add(saveButton); // Add save button to the button panel
+        //         buttonPanel.add(cancelButton); // Add cancel button to the button panel
+        //         mainPanel.add(buttonPanel, BorderLayout.SOUTH); // Add button panel to the bottom of the frame
 
-                // Create the list to display medical records
-                recordListModel = new DefaultListModel<>();
-                recordList = new JList<>(recordListModel);
-                JScrollPane listScrollPane = new JScrollPane(recordList); // Add scrolling for the list
-                mainPanel.add(listScrollPane, BorderLayout.EAST); // Add list to the east side of the panel
+        //         // Create the list to display medical records
+        //         recordListModel = new DefaultListModel<>();
+        //         recordList = new JList<>(recordListModel);
+        //         JScrollPane listScrollPane = new JScrollPane(recordList); // Add scrolling for the list
+        //         mainPanel.add(listScrollPane, BorderLayout.EAST); // Add list to the east side of the panel
 
-                getContentPane().add(mainPanel); // Add the main panel to the content pane
-                setVisible(true); // Make the frame visible
-            }
-        }
+        //         getContentPane().add(mainPanel); // Add the main panel to the content pane
+        //         setVisible(true); // Make the frame visible
+        //     }
+        // }
 
         // Placeholder for Add Additional Information Screen
         private class AddInformationScreen extends JFrame {
