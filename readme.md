@@ -2,7 +2,6 @@
 
 **Patient360** is an intuitive and efficient hospital management system designed to address inefficiencies in healthcare administration, particularly for receptionists. By consolidating critical tasks like appointment scheduling, patient record management, and doctor availability coordination into a single user-friendly platform, Patient360 streamlines operations and improves patient care delivery.
 
-**It is currently a work in progress**
 
 ---
 
@@ -32,7 +31,7 @@
 
 ---
 
-### **Front End** _(to be fully implemented in the third deliverable)_
+### **Front End**
 
 - **LoginFrame.java**: Receptionist has to verify their credentials to enter the system.
 - **StartingScreen.java**: This is the main screen, guiding the receptionist on what task they would like to accomplish in the system.
@@ -73,25 +72,28 @@ This project is built as a **desktop application** using **JavaFX** and **Swing*
 
 To run the application, follow these steps:
 
-1. **Ensure your environment is set up**:
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/rChwiecko/Patient360.git
+   ```
+
+2. **Ensure your environment is set up**:
 
    - Make sure you have a Java Development Kit (JDK) installed (preferably version 8 or higher).
    - Set up your IDE (e.g., IntelliJ IDEA, Eclipse, or VS Code) to recognize the project's structure and dependencies.
 
-2. **Compile the project**:
-
-   - Open the project in your IDE.
-   - Build the project to ensure there are no compilation errors.
 
 3. **Run the `main.java` file**:
+   - Switch to the src directory by running:
+   ```bash
+   cd src
+   ```
 
-   - Locate `main.java` in the project's file structure.
-   - Right-click on `main.java` and select `Run` (or execute it through the command line if you're using a terminal).
-   - Example command line execution:
-     ```bash
-     javac main.java
-     java main
-     ```
+   - Run the application by running:
+   ```bash
+   java Main.java
+   ```
+
 
 4. **Follow the prompts**:
 
